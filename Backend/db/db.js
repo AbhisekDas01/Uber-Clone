@@ -6,6 +6,12 @@ async function connectDb() {
         mongoose.connection.on('connected', () => {
             console.log("Connected to Db");
         });
+        mongoose.connection.on('error', (err) => {
+            console.error("Mongo Db Connection Error:", err);
+        });
+        mongoose.connection.on('disconnected', () => {
+            console.log("Mongo Db Disconnected");
+        });
 
         await mongoose.connect(MONGODB_URI);
     } catch (error) {
@@ -13,5 +19,7 @@ async function connectDb() {
         process.exit(1);
     }
 }
+
+
 
 export default connectDb;
