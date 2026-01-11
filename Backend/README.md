@@ -80,3 +80,76 @@ Occurs if an account with the provided email already exists.
   "message": "User already exists"
 }
 ```
+
+### Login User
+
+**Endpoint:** `/users/login` \
+**Method:** `POST` \
+**Description:** Authenticate a user with their email and password.
+
+#### Request Body
+
+The request body must be a JSON object containing `email` and `password`.
+
+| Field | Type | Required | Validations |
+| :--- | :--- | :--- | :--- |
+| `email` | String | Yes | Must be a valid email |
+| `password` | String | Yes | Min length: 6 characters |
+
+**Example Request:**
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securepassword123"
+}
+```
+
+#### Responses
+
+**Success (200 OK)**
+
+Returns the JWT authentication token and the user details.
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "_id": "65af8e9d40...",
+    "__v": 0
+  }
+}
+```
+
+**Error (400 Bad Request) - Validation Failure**
+
+Occurs if the input data fails validation checks.
+
+```json
+{
+  "errors": [
+    {
+      "type": "field",
+      "value": "invalid-email",
+      "msg": "Invalid Email",
+      "path": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+**Error (401 Unauthorized) - Invalid Credentials**
+
+Occurs if the email or password is incorrect.
+
+```json
+{
+  "message": "Invalid email or password"
+}
+```
