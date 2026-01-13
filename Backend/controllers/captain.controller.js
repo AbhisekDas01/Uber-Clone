@@ -56,3 +56,11 @@ export const registerCaptain = async (req , res , next) => {
     }
 }
 
+export const loginCaptain = async (req , res , next) => {
+
+    try {
+        
+    } catch (error) {
+        
+    }
+}

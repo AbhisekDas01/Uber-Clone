@@ -17,5 +17,9 @@ captainRouter.post('/register' , [
 ] , registerCaptain);
 
 
+captainRouter.post('/login' , [
+    body('email').isEmail().withMessage('Invalid Email'),
+    body('password').isLength({min: 6}).withMessage("Password ")
+])
 
 export default captainRouter;

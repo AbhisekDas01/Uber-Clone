@@ -26,7 +26,7 @@ app.get('/' , (req ,res) => {
 
 //routes 
 app.use('/users' , userRouter);
-app.use('/captain' , captainRouter);
+app.use('/captains' , captainRouter);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

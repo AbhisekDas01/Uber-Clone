@@ -239,7 +239,7 @@ Occurs if no token is provided or the token is invalid/blacklisted.
 
 ### Register Captain
 
-**Endpoint:** `/captain/register` \
+**Endpoint:** `/captains/register` \
 **Method:** `POST` \
 **Description:** Register a new captain with their personal and vehicle details.
 
