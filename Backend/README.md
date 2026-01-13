@@ -331,3 +331,159 @@ Occurs if a captain with the email already exists.
   "message": "Captain already exists"
 }
 ```
+
+### Login Captain
+
+**Endpoint:** `/captains/login` \
+**Method:** `POST` \
+**Description:** Authenticate a captain with their email and password.
+
+#### Request Body
+
+The request body must be a JSON object containing `email` and `password`.
+
+| Field | Type | Required | Validations |
+| :--- | :--- | :--- | :--- |
+| `email` | String | Yes | Must be a valid email |
+| `password` | String | Yes | Min length: 6 characters |
+
+**Example Request:**
+
+```json
+{
+  "email": "jane.captain@example.com",
+  "password": "securepassword456"
+}
+```
+
+#### Responses
+
+**Success (200 OK)**
+
+Returns the JWT authentication token and the captain details.
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "captain": {
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.captain@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "KA-01-AB-1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "_id": "65af8e9d40...",
+    "status": "active"
+  }
+}
+```
+
+**Error (400 Bad Request) - Validation Failure**
+
+Occurs if the input data fails validation checks.
+
+```json
+{
+  "errors": [
+    {
+      "type": "field",
+      "value": "invalid-email",
+      "msg": "Invalid Email",
+      "path": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+**Error (401 Unauthorized) - Invalid Credentials**
+
+Occurs if the email or password is incorrect.
+
+```json
+{
+  "message": "Invalid email or password!"
+}
+```
+
+### Get Captain Profile
+
+**Endpoint:** `/captains/profile` \
+**Method:** `GET` \
+**Description:** Retrieve the profile information of the authenticated captain.
+
+#### Headers
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
+
+#### Responses
+
+**Success (200 OK)**
+
+Returns the captain details.
+
+```json
+{
+  "captain": {
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.captain@example.com",
+    "vehicle": { ... },
+    "_id": "65af8e9d40...",
+    "status": "active"
+  }
+}
+```
+
+**Error (401 Unauthorized)**
+
+Occurs if no token is provided or the token is invalid/blacklisted.
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Logout Captain
+
+**Endpoint:** `/captains/logout` \
+**Method:** `GET` \
+**Description:** Logout the current captain and invalidate the authentication token.
+
+#### Headers
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
+
+#### Responses
+
+**Success (200 OK)**
+
+Confirms that the captain has been logged out.
+
+```json
+{
+  "message": "Logout successfully!"
+}
+```
+
+**Error (401 Unauthorized)**
+
+Occurs if no token is provided or the token is invalid/blacklisted.
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
