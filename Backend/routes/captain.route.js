@@ -1,6 +1,7 @@
 import express from 'express'
 import {body} from 'express-validator'
-import { registerCaptain } from '../controllers/captain.controller.js';
+import { getCaptainProfile, loginCaptain, logoutCaptain, registerCaptain } from '../controllers/captain.controller.js';
+import { authCaptain } from '../middlewares/auth.middleware.js';
 
 
 const captainRouter = express.Router();
@@ -19,7 +20,13 @@ captainRouter.post('/register' , [
 
 captainRouter.post('/login' , [
     body('email').isEmail().withMessage('Invalid Email'),
-    body('password').isLength({min: 6}).withMessage("Password ")
-])
+    body('password').isLength({min: 6}).withMessage("Password must be 6 char long")
+] , loginCaptain);
+
+captainRouter.get('/profile' , authCaptain , getCaptainProfile);
+
+captainRouter.get('/logout' , authCaptain , logoutCaptain);
+
+
 
 export default captainRouter;
