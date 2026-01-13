@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { MONGODB_URI } from '../configs/env.config.js'
+import { ENV_MONGODB_URI } from '../configs/env.config.js'
 
 async function connectDb() {
     try {
@@ -13,7 +13,7 @@ async function connectDb() {
             console.log("Mongo Db Disconnected");
         });
 
-        await mongoose.connect(MONGODB_URI);
+        await mongoose.connect(ENV_MONGODB_URI);
     } catch (error) {
         console.error("Error connecting the db: ", error);
         process.exit(1);

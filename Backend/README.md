@@ -153,3 +153,78 @@ Occurs if the email or password is incorrect.
   "message": "Invalid email or password"
 }
 ```
+
+### User Profile
+
+**Endpoint:** `/users/profile` \
+**Method:** `GET` \
+**Description:** Retrieve the profile information of the authenticated user.
+
+#### Headers
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
+
+#### Responses
+
+**Success (200 OK)**
+
+Returns the user details.
+
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "socketId": "socket123",
+  "_id": "65af8e9d40...",
+  "__v": 0
+}
+```
+
+**Error (401 Unauthorized)**
+
+Occurs if no token is provided or the token is invalid/blacklisted.
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Logout User
+
+**Endpoint:** `/users/logout` \
+**Method:** `GET` \
+**Description:** Logout the current user and invalidate the authentication token.
+
+#### Headers
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
+
+#### Responses
+
+**Success (200 OK)**
+
+Confirms that the user has been logged out.
+
+```json
+{
+  "message": "Logged out"
+}
+```
+
+**Error (401 Unauthorized)**
+
+Occurs if no token is provided or the token is invalid/blacklisted.
+
+```json
+{
+  "message": "Unauthorized"
+}
+```

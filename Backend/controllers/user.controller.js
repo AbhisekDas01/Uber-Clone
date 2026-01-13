@@ -1,6 +1,8 @@
 import userModel from "../models/user.model.js";
 import {validationResult} from 'express-validator'
 import userService from "../services/user.service.js";
+import { ENV_NODE_ENV } from "../configs/env.config.js";
+import blacklistTokenModel from "../models/blacklistToken.model.js";
 
 export const registerUser = async (req ,res, next ) => {
 
@@ -73,9 +75,43 @@ export const loginUser = async (req , res , next) => {
         const userObj = user.toObject();
         delete userObj.password; // remove password before sending 
 
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: ENV_NODE_ENV === 'production',
+            maxAge: 3600000 * 24 * 7
+        });
+
         res.status(200).json({token , user: userObj});
 
     } catch (error) {
         next(error);
     }
 }
+
+export const getUserProfile = async (req , res , next) => {
+
+    res.status(200).json(req.user);
+}
+
+
+export const logoutUser = async (req , res , next) => {
+
+    try {
+        
+        res.clearCookie('token');
+
+        const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
+        
+        await blacklistTokenModel.create({token});
+
+        res.status(200).json({
+            message: "Logged out"
+        })
+
+    } catch (error) {
+        
+        next(error);
+    }
+}
+
+

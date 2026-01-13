@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
-import { JWT_SECRET } from "../configs/env.config.js";
+import { ENV_JWT_SECRET } from "../configs/env.config.js";
 
 const userSchema = new mongoose.Schema({
     fullname: {
@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.generateAuthToken = function() {
 
-    const token = jwt.sign({_id: this._id} , JWT_SECRET);
+    const token = jwt.sign({_id: this._id} , ENV_JWT_SECRET , {expiresIn: '24h'});
     return token;
 }
 
