@@ -1,5 +1,9 @@
 # Uber Clone Backend API Documentation
 
+## Table of Contents
+* [User Routes](#user-routes)
+* [Captain Routes](#captain-routes)
+
 ## User Routes
 
 ### Register User
@@ -226,5 +230,104 @@ Occurs if no token is provided or the token is invalid/blacklisted.
 ```json
 {
   "message": "Unauthorized"
+}
+```
+
+---
+
+## Captain Routes
+
+### Register Captain
+
+**Endpoint:** `/captain/register` \
+**Method:** `POST` \
+**Description:** Register a new captain with their personal and vehicle details.
+
+#### Request Body
+
+The request body must be a JSON object containing `fullname`, `email`, `password`, and `vehicle` details.
+
+| Field | Type | Required | Validations |
+| :--- | :--- | :--- | :--- |
+| `fullname.firstname` | String | Yes | Min length: 3 characters |
+| `fullname.lastname` | String | No | Min length: 3 characters |
+| `email` | String | Yes | Must be a valid email |
+| `password` | String | Yes | Min length: 6 characters |
+| `vehicle.color` | String | Yes | Min length: 3 characters |
+| `vehicle.plate` | String | Yes | Min length: 3 characters |
+| `vehicle.capacity` | Number | Yes | Min: 1 |
+| `vehicle.vehicleType` | String | Yes | One of: 'car', 'motorcycle', 'auto' |
+
+**Example Request:**
+
+```json
+{
+  "fullname": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  },
+  "email": "jane.captain@example.com",
+  "password": "securepassword456",
+  "vehicle": {
+    "color": "Red",
+    "plate": "KA-01-AB-1234",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+#### Responses
+
+**Success (201 Created)**
+
+Returns the JWT authentication token and the created captain details.
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "captain": {
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.captain@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "KA-01-AB-1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "_id": "65af8e9d40...",
+    "status": "inactive"
+  }
+}
+```
+
+**Error (400 Bad Request) - Validation Failure**
+
+Occurs if input validation fails.
+
+```json
+{
+  "errors": [
+    {
+      "type": "field",
+      "value": "invalid",
+      "msg": "Invalid vehicle type",
+      "path": "vehicle.vehicleType",
+      "location": "body"
+    }
+  ]
+}
+```
+
+**Error (400 Bad Request) - Captain Already Exists**
+
+Occurs if a captain with the email already exists.
+
+```json
+{
+  "message": "Captain already exists"
 }
 ```
