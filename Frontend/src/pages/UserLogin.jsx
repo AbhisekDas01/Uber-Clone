@@ -8,7 +8,6 @@ const UserLogin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [showCrossBtn , setShowCrossBtn] = useState(false);
 
     const [userData, setUserData] = useState({});
 
@@ -22,7 +21,7 @@ const UserLogin = () => {
 
         setEmail('');
         setPassword('');
-        console.log(userData);
+
 
     }
 
@@ -31,38 +30,30 @@ const UserLogin = () => {
             <div>
                 <img className='w-16 mb-10' src="./Uber_logo.png" alt="Uber logo" />
                 <form onSubmit={(e) => submitHandler(e)}>
-                    <h3 className='text-lg font-medium mb-2'>What's your email</h3>
-                    <div className='bg-[#eeeeee] mb-7  rounded px-4 py-2  w-full flex items-center justify-between'>
+                    <h3 className='text-base font-medium mb-2'>What's your email</h3>
+                    <div className='bg-[#eeeeee] mb-6  rounded px-4 py-2  w-full flex items-center justify-between'>
                         <input
                             required
-                            className='bg-transparent w-full outline-none text-lg placeholder:text-base'
+                            className='bg-transparent w-full outline-none text-base placeholder:text-sm'
                             type="email"
                             value={email}
                             onChange={(e) => {
                                 setEmail(e.target.value);
-                                if (e.target.value.length > 0) {
-                                    setShowCrossBtn(true);
-                                } else {
-                                    setShowCrossBtn(false);
-                                }
                             }}
                             placeholder='email@example.com'
                         />
-                        <div
-                            onClick={() => {
-                                setEmail('')
-                                setShowCrossBtn(false)
-                            }}
-                            className='h-full cursor-pointer'
-                        >
-                            {showCrossBtn && <GoXCircle />}
-                        </div>
+                        {email.length > 0 && (
+                            <GoXCircle
+                                className='cursor-pointer'
+                                onClick={() => setEmail("")}
+                            />
+                        )}
                     </div>
 
-                    <h3 className='text-lg font-medium  mb-2'>Enter Password</h3>
-                    <div className='flex w-full justify-between items-center bg-[#eeeeee] mb-7  rounded px-4 py-2'>
+                    <h3 className='text-base font-medium  mb-2'>Enter Password</h3>
+                    <div className='flex w-full justify-between items-center bg-[#eeeeee] mb-6  rounded px-4 py-2'>
                         <input
-                            className='bg-transparent w-full outline-none text-lg placeholder:text-base'
+                            className='bg-transparent w-full outline-none text-base placeholder:text-sm'
                             type={showPassword ? "text" : "password"}
                             placeholder='password'
                             value={password}
@@ -71,14 +62,22 @@ const UserLogin = () => {
                             }}
                             required
                         />
-                        <div
-                            onClick={() => setShowPassword(!showPassword)}
-                            className='h-full cursor-pointer'
-                        >
-                            {
-                                showPassword ?
-                                    <FaRegEyeSlash /> : <FaRegEye />
-                            }
+                        <div className='flex items-center gap-2'>
+                            {password.length > 0 && (
+                                <GoXCircle
+                                    className='cursor-pointer'
+                                    onClick={() => setPassword("")}
+                                />
+                            )}
+                            <div
+                                onClick={() => setShowPassword(!showPassword)}
+                                className='cursor-pointer'
+                            >
+                                {
+                                    showPassword ?
+                                        <FaRegEyeSlash /> : <FaRegEye />
+                                }
+                            </div>
                         </div>
                     </div>
 
