@@ -1,26 +1,61 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { GoXCircle } from "react-icons/go";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { UserDataContext } from '../context/UserContext';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const UserLogin = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const [userData, setUserData] = useState({});
+    const navigate = useNavigate();
 
-    const submitHandler = (e) => {
+    const { setUser } = useContext(UserDataContext);
+
+
+    const submitHandler = async (e) => {
         e.preventDefault();
 
-        setUserData({
+        setLoading(true);
+        const user = {
             email: email,
             password: password
-        });
+        };
 
-        setEmail('');
-        setPassword('');
+        try {
+
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, user);
+
+            if (response.status === 200) {
+                const data = response.data;
+                setUser(data.user);
+                localStorage.setItem('token', data.token);
+                toast.success("Login successful");
+                navigate('/home');
+                
+                // Clear state only on success
+                setEmail('');
+                setPassword('');
+            }
+
+
+        } catch (error) {
+            if (error.response && error.response.data && Array.isArray(error.response.data.errors)) {
+                error.response.data.errors.forEach(({ msg }) => toast.error(msg));
+            } else {
+                toast.error(error.response?.data?.message || "Login failed");
+            }
+
+        } finally {
+            setLoading(false);
+        }
+
+
 
 
     }
@@ -82,8 +117,9 @@ const UserLogin = () => {
                     </div>
 
                     <button
-                        className='bg-[#111] text-white font-semibold  mb-7 outline-none rounded px-4 py-2  w-full text-lg placeholder:text-base'
-                    >Login</button>
+                        className='bg-[#111] text-white font-semibold  mb-7 outline-none rounded px-4 py-2  w-full text-lg placeholder:text-base disabled:bg-gray-400 disabled:cursor-not-allowed'
+                        disabled={loading}
+                    >{loading ? "Logging in..." : "Login"}</button>
 
                 </form>
                 <p className='text-center'>
