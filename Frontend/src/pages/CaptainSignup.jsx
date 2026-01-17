@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { GoXCircle } from "react-icons/go";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { CaptainDataContext } from '../context/CaptainContext';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const CaptainSignup = () => {
 
@@ -10,25 +13,70 @@ const CaptainSignup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [vehicleColor, setVehicleColor] = useState('')
+  const [vehiclePlate, setVehiclePlate] = useState('')
+  const [vehicleCapacity, setVehicleCapacity] = useState('')
+  const [vehicleType, setVehicleType] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const [captainData, setCaptainData] = useState({});
+  const { setCaptain } = React.useContext(CaptainDataContext);
 
-  const submitHandler = (e) => {
+  const navigate = useNavigate();
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-
-    setUserData({
+    setLoading(true);
+    
+    const captainData = {
       fullname: {
-        firstname,
-        lastname
+        firstname: firstname,
+        lastname: lastname
       },
       email: email,
-      password: password
-    });
+      password: password,
+      vehicle: {
+        color: vehicleColor,
+        plate: vehiclePlate,
+        capacity: vehicleCapacity,
+        vehicleType: vehicleType
+      }
+    }
 
-    setEmail('');
-    setPassword('');
-    setFirstname("");
-    setLastname("");
+    try {
+
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
+
+      if (response.status === 201) {
+        const data = response.data;
+        setCaptain(data.captain);
+        localStorage.setItem('token', data.token);
+        toast.success("Captain registered");
+        navigate('/captain-home')
+      }
+
+
+      setEmail('');
+      setPassword('');
+      setFirstname("");
+      setLastname("");
+      setVehicleCapacity("");
+      setVehicleColor("");
+      setVehiclePlate("");
+      setVehicleType("");
+
+    } catch (error) {
+
+      if (error.response && error.response.data && Array.isArray(error.response.data.errors)) {
+        error.response.data.errors.forEach(({ msg }) => toast.error(msg));
+      } else {
+        toast.error(error.response?.data?.message || "Signup failed");
+      }
+
+    } finally {
+      setLoading(false);
+    }
+
+
 
   }
 
@@ -105,6 +153,82 @@ const CaptainSignup = () => {
             )}
           </div>
 
+          {/**Vehicle information */}
+          <h3 className='text-base font-medium  mb-2'>Vehicle information</h3>
+
+          <div className='mb-6 flex items-center justify-between gap-2'>
+
+            {/**vehicle color */}
+            <div className='bg-[#eeeeee]  rounded px-4 py-2  w-1/2 flex items-center justify-between'>
+              <input
+                required
+                className='bg-transparent w-full outline-none text-base placeholder:text-sm'
+                type="text"
+                value={vehicleColor}
+                onChange={(e) => {
+                  setVehicleColor(e.target.value);
+                }}
+                placeholder='Vehicle Color'
+              />
+              {vehicleColor.length > 0 && (
+                <GoXCircle
+                  className='cursor-pointer'
+                  onClick={() => setVehicleColor("")}
+                />
+              )}
+            </div>
+
+            {/* Number plate */}
+            <div className='bg-[#eeeeee]  rounded px-4 py-2  w-1/2 flex items-center justify-between'>
+              <input
+                required
+                className='bg-transparent w-full outline-none text-base placeholder:text-sm'
+                type="text"
+                value={vehiclePlate}
+                onChange={(e) => {
+                  setVehiclePlate(e.target.value);
+                }}
+                placeholder='Vehicle plate'
+              />
+              {vehiclePlate.length > 0 && (
+                <GoXCircle
+                  className='cursor-pointer'
+                  onClick={() => setVehiclePlate("")}
+                />
+              )}
+            </div>
+          </div>
+
+          <div className='mb-6 flex items-center justify-between gap-2'>
+            <div className='bg-[#eeeeee] rounded px-4 py-2 w-1/2 flex items-center justify-between'>
+              <input
+                required
+                className='bg-transparent w-full outline-none text-base placeholder:text-sm'
+                type="text"
+                placeholder='Vehicle Capacity'
+                value={vehicleCapacity}
+                onChange={(e) => {
+                  setVehicleCapacity(e.target.value)
+                }}
+              />
+            </div>
+            <div className='bg-[#eeeeee] rounded px-4 py-2 w-1/2 flex items-center justify-between'>
+              <select
+                required
+                className='bg-transparent w-full outline-none text-base placeholder:text-sm'
+                value={vehicleType}
+                onChange={(e) => {
+                  setVehicleType(e.target.value)
+                }}
+              >
+                <option value="" disabled>Select Vehicle Type</option>
+                <option value="car">Car</option>
+                <option value="auto">Auto</option>
+                <option value="motorcycle">Moto</option>
+              </select>
+            </div>
+          </div>
+
           <h3 className='text-base font-medium  mb-2'>Enter Password</h3>
           <div className='flex w-full justify-between items-center bg-[#eeeeee] mb-6  rounded px-4 py-2'>
             <input
@@ -138,7 +262,8 @@ const CaptainSignup = () => {
 
           <button
             className='bg-[#111] text-white font-semibold  mb-7 outline-none rounded px-4 py-2  w-full text-lg placeholder:text-base'
-          >Create Account</button>
+            disabled={loading}
+          >{loading ? "Creating Account..." : "Create Account"}</button>
 
         </form>
         <p className='text-center'>

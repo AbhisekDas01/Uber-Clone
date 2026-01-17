@@ -1,27 +1,56 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { GoXCircle } from "react-icons/go";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
+import { CaptainDataContext } from '../context/CaptainContext';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+
 
 const CaptainLogin = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [captainData, setCaptainData] = useState({});
+  const { captain, setCaptain } = useContext(CaptainDataContext);
+  const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    setCaptainData({
+    const captainData = {
       email: email,
       password: password
-    });
+    }
+    try {
 
-    setEmail('');
-    setPassword('');
-    console.log(userData);
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captainData);
+
+      if (response.status === 200) {
+        const data = response.data;
+        setCaptain(data.captain);
+        localStorage.setItem('token', data.token);
+
+        toast.success("Login success");
+        navigate('/captain-home');
+      }
+
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+        if (error.response && error.response.data && Array.isArray(error.response.data.errors)) {
+          error.response.data.errors.forEach(({ msg }) => toast.error(msg));
+        } else {
+          toast.error(error.response?.data?.message || "Login failed");
+        }
+    } finally {
+      setLoading(false);
+    }
+
+
 
   }
 
@@ -43,11 +72,11 @@ const CaptainLogin = () => {
               placeholder='email@example.com'
             />
             {email.length > 0 && (
-                <GoXCircle
-                  className='cursor-pointer'
-                  onClick={() => setEmail("")}
-                />
-              )}
+              <GoXCircle
+                className='cursor-pointer'
+                onClick={() => setEmail("")}
+              />
+            )}
           </div>
 
           <h3 className='text-base font-medium  mb-2'>Enter Password</h3>
@@ -82,8 +111,9 @@ const CaptainLogin = () => {
           </div>
 
           <button
-            className='bg-[#111] text-white font-semibold  mb-7 outline-none rounded px-4 py-2  w-full text-lg placeholder:text-base'
-          >Login</button>
+            className='bg-[#111] text-white font-semibold  mb-7 outline-none rounded px-4 py-2  w-full text-lg placeholder:text-base disabled:cursor-none'
+            disabled={loading}
+          >{loading ? "Logging in.." : "Login"}</button>
 
         </form>
         <p className='text-center'>
