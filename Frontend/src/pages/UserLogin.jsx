@@ -37,7 +37,7 @@ const UserLogin = () => {
                 localStorage.setItem('token', data.token);
                 toast.success("Login successful");
                 navigate('/home');
-                
+
                 // Clear state only on success
                 setEmail('');
                 setPassword('');
