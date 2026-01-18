@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import { GoXCircle } from 'react-icons/go';
 import { Link, useNavigate } from 'react-router-dom';
 import { CaptainDataContext } from '../context/CaptainContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import InputField from '../components/InputField';
+import PasswordField from '../components/PasswordField';
 
 const CaptainSignup = () => {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
     const [vehicleColor, setVehicleColor] = useState('');
     const [vehiclePlate, setVehiclePlate] = useState('');
     const [vehicleCapacity, setVehicleCapacity] = useState('');
@@ -96,68 +95,39 @@ const CaptainSignup = () => {
 
                     <div className="mb-6 flex items-center justify-between gap-2">
                         {/**first name */}
-                        <div className="bg-[#eeeeee]  rounded px-4 py-2  w-1/2 flex items-center justify-between">
-                            <input
-                                required
-                                className="bg-transparent w-full outline-none text-base placeholder:text-sm"
-                                type="text"
-                                value={firstname}
-                                onChange={(e) => {
-                                    setFirstname(e.target.value);
-                                }}
-                                placeholder="First name"
-                            />
-                            {firstname.length > 0 && (
-                                <GoXCircle
-                                    className="cursor-pointer"
-                                    onClick={() => setFirstname('')}
-                                />
-                            )}
-                        </div>
+                        <InputField
+                            classes={'w-1/2'}
+                            required={true}
+                            value={firstname}
+                            setValue={setFirstname}
+                            placeholder={'First name'}
+
+                        />
 
                         {/* {lastname} */}
-                        <div className="bg-[#eeeeee]  rounded px-4 py-2  w-1/2 flex items-center justify-between">
-                            <input
-                                required
-                                className="bg-transparent w-full outline-none text-base placeholder:text-sm"
-                                type="text"
-                                value={lastname}
-                                onChange={(e) => {
-                                    setLastname(e.target.value);
-                                }}
-                                placeholder="Last name"
-                            />
-                            {lastname.length > 0 && (
-                                <GoXCircle
-                                    className="cursor-pointer"
-                                    onClick={() => setLastname('')}
-                                />
-                            )}
-                        </div>
+                        <InputField
+                            classes={'w-1/2'}
+                            required={false}
+                            value={lastname}
+                            setValue={setLastname}
+                            placeholder={'Last name'}
+
+                        />
                     </div>
 
                     {/**Email input */}
                     <h3 className="text-base font-medium mb-2">
                         What's your email
                     </h3>
-                    <div className="bg-[#eeeeee] mb-6  rounded px-4 py-2  w-full flex items-center justify-between">
-                        <input
-                            required
-                            className="bg-transparent w-full outline-none text-base placeholder:text-sm"
-                            type="email"
-                            value={email}
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                            }}
-                            placeholder="email@example.com"
-                        />
-                        {email.length > 0 && (
-                            <GoXCircle
-                                className="cursor-pointer"
-                                onClick={() => setEmail('')}
-                            />
-                        )}
-                    </div>
+                    <InputField
+                        classes={'w-full mb-6'}
+                        required={true}
+                        type='email'
+                        value={email}
+                        setValue={setEmail}
+                        placeholder={'example@example.com'}
+
+                    />
 
                     {/**Vehicle information */}
                     <h3 className="text-base font-medium  mb-2">
@@ -166,59 +136,39 @@ const CaptainSignup = () => {
 
                     <div className="mb-6 flex items-center justify-between gap-2">
                         {/**vehicle color */}
-                        <div className="bg-[#eeeeee]  rounded px-4 py-2  w-1/2 flex items-center justify-between">
-                            <input
-                                required
-                                className="bg-transparent w-full outline-none text-base placeholder:text-sm"
-                                type="text"
-                                value={vehicleColor}
-                                onChange={(e) => {
-                                    setVehicleColor(e.target.value);
-                                }}
-                                placeholder="Vehicle Color"
-                            />
-                            {vehicleColor.length > 0 && (
-                                <GoXCircle
-                                    className="cursor-pointer"
-                                    onClick={() => setVehicleColor('')}
-                                />
-                            )}
-                        </div>
+                        <InputField
+                            classes={'w-1/2'}
+                            required={true}
+                            type='text'
+                            value={vehicleColor}
+                            setValue={setVehicleColor}
+                            placeholder={'Vehicle Color'}
+
+                        />
 
                         {/* Number plate */}
-                        <div className="bg-[#eeeeee]  rounded px-4 py-2  w-1/2 flex items-center justify-between">
-                            <input
-                                required
-                                className="bg-transparent w-full outline-none text-base placeholder:text-sm"
-                                type="text"
-                                value={vehiclePlate}
-                                onChange={(e) => {
-                                    setVehiclePlate(e.target.value);
-                                }}
-                                placeholder="Vehicle plate"
-                            />
-                            {vehiclePlate.length > 0 && (
-                                <GoXCircle
-                                    className="cursor-pointer"
-                                    onClick={() => setVehiclePlate('')}
-                                />
-                            )}
-                        </div>
+                        <InputField
+                            classes={'w-1/2'}
+                            required={true}
+                            type='text'
+                            value={vehiclePlate}
+                            setValue={setVehiclePlate}
+                            placeholder={'Vehicle Plate'}
+
+                        />
                     </div>
 
                     <div className="mb-6 flex items-center justify-between gap-2">
-                        <div className="bg-[#eeeeee] rounded px-4 py-2 w-1/2 flex items-center justify-between">
-                            <input
-                                required
-                                className="bg-transparent w-full outline-none text-base placeholder:text-sm"
-                                type="text"
-                                placeholder="Vehicle Capacity"
-                                value={vehicleCapacity}
-                                onChange={(e) => {
-                                    setVehicleCapacity(e.target.value);
-                                }}
-                            />
-                        </div>
+
+                        <InputField
+                            classes={'w-1/2'}
+                            required={true}
+                            type='text'
+                            value={vehicleCapacity}
+                            setValue={setVehicleCapacity}
+                            placeholder={'Vehicle Capacity'}
+
+                        />
                         <div className="bg-[#eeeeee] rounded px-4 py-2 w-1/2 flex items-center justify-between">
                             <select
                                 required
@@ -241,36 +191,10 @@ const CaptainSignup = () => {
                     <h3 className="text-base font-medium  mb-2">
                         Enter Password
                     </h3>
-                    <div className="flex w-full justify-between items-center bg-[#eeeeee] mb-6  rounded px-4 py-2">
-                        <input
-                            className="bg-transparent w-full outline-none text-base placeholder:text-sm"
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder="password"
-                            value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                            }}
-                            required
-                        />
-                        <div className="flex items-center gap-2">
-                            {password.length > 0 && (
-                                <GoXCircle
-                                    className="cursor-pointer"
-                                    onClick={() => setPassword('')}
-                                />
-                            )}
-                            <div
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="cursor-pointer"
-                            >
-                                {showPassword ? (
-                                    <FaRegEyeSlash />
-                                ) : (
-                                    <FaRegEye />
-                                )}
-                            </div>
-                        </div>
-                    </div>
+                    <PasswordField
+                        password={password}
+                        setPassword={setPassword}
+                    />
 
                     <button
                         className="bg-[#111] text-white font-semibold  mb-7 outline-none rounded px-4 py-2  w-full text-lg placeholder:text-base"

@@ -1,9 +1,9 @@
 import React from 'react';
 import { GoXCircle } from 'react-icons/go';
 
-const InputField = ({ type = 'text', required = false, placeholder, value, setValue }) => {
+const InputField = ({ type = 'text', required = false, placeholder, value, setValue , classes }) => {
     return (
-        <div className="bg-[#eeeeee] mb-6 rounded px-4 py-2 w-full flex items-center justify-between">
+        <div className={`bg-[#eeeeee] rounded px-4 py-2 flex items-center justify-between ${classes}`}>
             <input
                 required={required}
                 className="bg-transparent w-full outline-none text-base placeholder:text-sm"

@@ -1,15 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import { GoXCircle } from 'react-icons/go';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserDataContext } from '../context/UserContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import InputField from '../components/InputField';
+import PasswordField from '../components/PasswordField';
 
 const UserLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -71,58 +70,22 @@ const UserLogin = () => {
                     <h3 className="text-base font-medium mb-2">
                         What's your email
                     </h3>
-                    <div className="bg-[#eeeeee] mb-6  rounded px-4 py-2  w-full flex items-center justify-between">
-                        <input
-                            required
-                            className="bg-transparent w-full outline-none text-base placeholder:text-sm"
-                            type="email"
-                            value={email}
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                            }}
-                            placeholder="email@example.com"
-                        />
-                        {email.length > 0 && (
-                            <GoXCircle
-                                className="cursor-pointer"
-                                onClick={() => setEmail('')}
-                            />
-                        )}
-                    </div>
+                    <InputField
+                        required
+                        classes={'w-full mb-6'}
+                        type='email'
+                        value={email}
+                        setValue={setEmail}
+                        placeholder={'example@example.com'}
+                    />
 
                     <h3 className="text-base font-medium  mb-2">
                         Enter Password
                     </h3>
-                    <div className="flex w-full justify-between items-center bg-[#eeeeee] mb-6  rounded px-4 py-2">
-                        <input
-                            className="bg-transparent w-full outline-none text-base placeholder:text-sm"
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder="password"
-                            value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                            }}
-                            required
-                        />
-                        <div className="flex items-center gap-2">
-                            {password.length > 0 && (
-                                <GoXCircle
-                                    className="cursor-pointer"
-                                    onClick={() => setPassword('')}
-                                />
-                            )}
-                            <div
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="cursor-pointer"
-                            >
-                                {showPassword ? (
-                                    <FaRegEyeSlash />
-                                ) : (
-                                    <FaRegEye />
-                                )}
-                            </div>
-                        </div>
-                    </div>
+                    <PasswordField
+                        password={password}
+                        setPassword={setPassword}
+                    />
 
                     <button
                         className="bg-[#111] text-white font-semibold  mb-7 outline-none rounded px-4 py-2  w-full text-lg placeholder:text-base disabled:bg-gray-400 disabled:cursor-not-allowed"
