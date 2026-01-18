@@ -1,8 +1,9 @@
 # Uber Clone Backend API Documentation
 
 ## Table of Contents
-* [User Routes](#user-routes)
-* [Captain Routes](#captain-routes)
+
+- [User Routes](#user-routes)
+- [Captain Routes](#captain-routes)
 
 ## User Routes
 
@@ -16,23 +17,23 @@
 
 The request body must be a JSON object containing `fullname` (object with `firstname` and `lastname`), `email`, and `password`.
 
-| Field | Type | Required | Validations |
-| :--- | :--- | :--- | :--- |
-| `fullname.firstname` | String | Yes | Min length: 3 characters |
-| `fullname.lastname` | String | No | Min length: 3 characters |
-| `email` | String | Yes | Must be a valid email |
-| `password` | String | Yes | Min length: 6 characters |
+| Field                | Type   | Required | Validations              |
+| :------------------- | :----- | :------- | :----------------------- |
+| `fullname.firstname` | String | Yes      | Min length: 3 characters |
+| `fullname.lastname`  | String | No       | Min length: 3 characters |
+| `email`              | String | Yes      | Must be a valid email    |
+| `password`           | String | Yes      | Min length: 6 characters |
 
 **Example Request:**
 
 ```json
 {
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
-  },
-  "email": "john.doe@example.com",
-  "password": "securepassword123"
+    "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "password": "securepassword123"
 }
 ```
 
@@ -44,16 +45,16 @@ Returns the JWT authentication token and the created user details.
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com",
-    "_id": "65af8e9d40...",
-    "__v": 0
-  }
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "john.doe@example.com",
+        "_id": "65af8e9d40...",
+        "__v": 0
+    }
 }
 ```
 
@@ -63,15 +64,15 @@ Occurs if the input data fails validation checks (e.g., password too short, inva
 
 ```json
 {
-  "errors": [
-    {
-      "type": "field",
-      "value": "jo",
-      "msg": "First name must be at least 3 char long",
-      "path": "fullname.firstname",
-      "location": "body"
-    }
-  ]
+    "errors": [
+        {
+            "type": "field",
+            "value": "jo",
+            "msg": "First name must be at least 3 char long",
+            "path": "fullname.firstname",
+            "location": "body"
+        }
+    ]
 }
 ```
 
@@ -81,7 +82,7 @@ Occurs if an account with the provided email already exists.
 
 ```json
 {
-  "message": "User already exists"
+    "message": "User already exists"
 }
 ```
 
@@ -95,17 +96,17 @@ Occurs if an account with the provided email already exists.
 
 The request body must be a JSON object containing `email` and `password`.
 
-| Field | Type | Required | Validations |
-| :--- | :--- | :--- | :--- |
-| `email` | String | Yes | Must be a valid email |
-| `password` | String | Yes | Min length: 6 characters |
+| Field      | Type   | Required | Validations              |
+| :--------- | :----- | :------- | :----------------------- |
+| `email`    | String | Yes      | Must be a valid email    |
+| `password` | String | Yes      | Min length: 6 characters |
 
 **Example Request:**
 
 ```json
 {
-  "email": "john.doe@example.com",
-  "password": "securepassword123"
+    "email": "john.doe@example.com",
+    "password": "securepassword123"
 }
 ```
 
@@ -117,16 +118,16 @@ Returns the JWT authentication token and the user details.
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com",
-    "_id": "65af8e9d40...",
-    "__v": 0
-  }
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "john.doe@example.com",
+        "_id": "65af8e9d40...",
+        "__v": 0
+    }
 }
 ```
 
@@ -136,15 +137,15 @@ Occurs if the input data fails validation checks.
 
 ```json
 {
-  "errors": [
-    {
-      "type": "field",
-      "value": "invalid-email",
-      "msg": "Invalid Email",
-      "path": "email",
-      "location": "body"
-    }
-  ]
+    "errors": [
+        {
+            "type": "field",
+            "value": "invalid-email",
+            "msg": "Invalid Email",
+            "path": "email",
+            "location": "body"
+        }
+    ]
 }
 ```
 
@@ -154,7 +155,7 @@ Occurs if the email or password is incorrect.
 
 ```json
 {
-  "message": "Invalid email or password"
+    "message": "Invalid email or password"
 }
 ```
 
@@ -166,8 +167,8 @@ Occurs if the email or password is incorrect.
 
 #### Headers
 
-| Key | Value | Description |
-| :--- | :--- | :--- |
+| Key             | Value            | Description                                                                   |
+| :-------------- | :--------------- | :---------------------------------------------------------------------------- |
 | `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
 
 #### Responses
@@ -178,14 +179,14 @@ Returns the user details.
 
 ```json
 {
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
-  },
-  "email": "john.doe@example.com",
-  "socketId": "socket123",
-  "_id": "65af8e9d40...",
-  "__v": 0
+    "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "socketId": "socket123",
+    "_id": "65af8e9d40...",
+    "__v": 0
 }
 ```
 
@@ -195,7 +196,7 @@ Occurs if no token is provided or the token is invalid/blacklisted.
 
 ```json
 {
-  "message": "Unauthorized"
+    "message": "Unauthorized"
 }
 ```
 
@@ -207,8 +208,8 @@ Occurs if no token is provided or the token is invalid/blacklisted.
 
 #### Headers
 
-| Key | Value | Description |
-| :--- | :--- | :--- |
+| Key             | Value            | Description                                                                   |
+| :-------------- | :--------------- | :---------------------------------------------------------------------------- |
 | `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
 
 #### Responses
@@ -219,7 +220,7 @@ Confirms that the user has been logged out.
 
 ```json
 {
-  "message": "Logged out"
+    "message": "Logged out"
 }
 ```
 
@@ -229,7 +230,7 @@ Occurs if no token is provided or the token is invalid/blacklisted.
 
 ```json
 {
-  "message": "Unauthorized"
+    "message": "Unauthorized"
 }
 ```
 
@@ -247,33 +248,33 @@ Occurs if no token is provided or the token is invalid/blacklisted.
 
 The request body must be a JSON object containing `fullname`, `email`, `password`, and `vehicle` details.
 
-| Field | Type | Required | Validations |
-| :--- | :--- | :--- | :--- |
-| `fullname.firstname` | String | Yes | Min length: 3 characters |
-| `fullname.lastname` | String | No | Min length: 3 characters |
-| `email` | String | Yes | Must be a valid email |
-| `password` | String | Yes | Min length: 6 characters |
-| `vehicle.color` | String | Yes | Min length: 3 characters |
-| `vehicle.plate` | String | Yes | Min length: 3 characters |
-| `vehicle.capacity` | Number | Yes | Min: 1 |
-| `vehicle.vehicleType` | String | Yes | One of: 'car', 'motorcycle', 'auto' |
+| Field                 | Type   | Required | Validations                         |
+| :-------------------- | :----- | :------- | :---------------------------------- |
+| `fullname.firstname`  | String | Yes      | Min length: 3 characters            |
+| `fullname.lastname`   | String | No       | Min length: 3 characters            |
+| `email`               | String | Yes      | Must be a valid email               |
+| `password`            | String | Yes      | Min length: 6 characters            |
+| `vehicle.color`       | String | Yes      | Min length: 3 characters            |
+| `vehicle.plate`       | String | Yes      | Min length: 3 characters            |
+| `vehicle.capacity`    | Number | Yes      | Min: 1                              |
+| `vehicle.vehicleType` | String | Yes      | One of: 'car', 'motorcycle', 'auto' |
 
 **Example Request:**
 
 ```json
 {
-  "fullname": {
-    "firstname": "Jane",
-    "lastname": "Doe"
-  },
-  "email": "jane.captain@example.com",
-  "password": "securepassword456",
-  "vehicle": {
-    "color": "Red",
-    "plate": "KA-01-AB-1234",
-    "capacity": 4,
-    "vehicleType": "car"
-  }
+    "fullname": {
+        "firstname": "Jane",
+        "lastname": "Doe"
+    },
+    "email": "jane.captain@example.com",
+    "password": "securepassword456",
+    "vehicle": {
+        "color": "Red",
+        "plate": "KA-01-AB-1234",
+        "capacity": 4,
+        "vehicleType": "car"
+    }
 }
 ```
 
@@ -285,22 +286,22 @@ Returns the JWT authentication token and the created captain details.
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "captain": {
-    "fullname": {
-      "firstname": "Jane",
-      "lastname": "Doe"
-    },
-    "email": "jane.captain@example.com",
-    "vehicle": {
-      "color": "Red",
-      "plate": "KA-01-AB-1234",
-      "capacity": 4,
-      "vehicleType": "car"
-    },
-    "_id": "65af8e9d40...",
-    "status": "inactive"
-  }
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "captain": {
+        "fullname": {
+            "firstname": "Jane",
+            "lastname": "Doe"
+        },
+        "email": "jane.captain@example.com",
+        "vehicle": {
+            "color": "Red",
+            "plate": "KA-01-AB-1234",
+            "capacity": 4,
+            "vehicleType": "car"
+        },
+        "_id": "65af8e9d40...",
+        "status": "inactive"
+    }
 }
 ```
 
@@ -310,15 +311,15 @@ Occurs if input validation fails.
 
 ```json
 {
-  "errors": [
-    {
-      "type": "field",
-      "value": "invalid",
-      "msg": "Invalid vehicle type",
-      "path": "vehicle.vehicleType",
-      "location": "body"
-    }
-  ]
+    "errors": [
+        {
+            "type": "field",
+            "value": "invalid",
+            "msg": "Invalid vehicle type",
+            "path": "vehicle.vehicleType",
+            "location": "body"
+        }
+    ]
 }
 ```
 
@@ -328,7 +329,7 @@ Occurs if a captain with the email already exists.
 
 ```json
 {
-  "message": "Captain already exists"
+    "message": "Captain already exists"
 }
 ```
 
@@ -342,17 +343,17 @@ Occurs if a captain with the email already exists.
 
 The request body must be a JSON object containing `email` and `password`.
 
-| Field | Type | Required | Validations |
-| :--- | :--- | :--- | :--- |
-| `email` | String | Yes | Must be a valid email |
-| `password` | String | Yes | Min length: 6 characters |
+| Field      | Type   | Required | Validations              |
+| :--------- | :----- | :------- | :----------------------- |
+| `email`    | String | Yes      | Must be a valid email    |
+| `password` | String | Yes      | Min length: 6 characters |
 
 **Example Request:**
 
 ```json
 {
-  "email": "jane.captain@example.com",
-  "password": "securepassword456"
+    "email": "jane.captain@example.com",
+    "password": "securepassword456"
 }
 ```
 
@@ -364,22 +365,22 @@ Returns the JWT authentication token and the captain details.
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "captain": {
-    "fullname": {
-      "firstname": "Jane",
-      "lastname": "Doe"
-    },
-    "email": "jane.captain@example.com",
-    "vehicle": {
-      "color": "Red",
-      "plate": "KA-01-AB-1234",
-      "capacity": 4,
-      "vehicleType": "car"
-    },
-    "_id": "65af8e9d40...",
-    "status": "active"
-  }
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "captain": {
+        "fullname": {
+            "firstname": "Jane",
+            "lastname": "Doe"
+        },
+        "email": "jane.captain@example.com",
+        "vehicle": {
+            "color": "Red",
+            "plate": "KA-01-AB-1234",
+            "capacity": 4,
+            "vehicleType": "car"
+        },
+        "_id": "65af8e9d40...",
+        "status": "active"
+    }
 }
 ```
 
@@ -389,15 +390,15 @@ Occurs if the input data fails validation checks.
 
 ```json
 {
-  "errors": [
-    {
-      "type": "field",
-      "value": "invalid-email",
-      "msg": "Invalid Email",
-      "path": "email",
-      "location": "body"
-    }
-  ]
+    "errors": [
+        {
+            "type": "field",
+            "value": "invalid-email",
+            "msg": "Invalid Email",
+            "path": "email",
+            "location": "body"
+        }
+    ]
 }
 ```
 
@@ -407,7 +408,7 @@ Occurs if the email or password is incorrect.
 
 ```json
 {
-  "message": "Invalid email or password!"
+    "message": "Invalid email or password!"
 }
 ```
 
@@ -419,8 +420,8 @@ Occurs if the email or password is incorrect.
 
 #### Headers
 
-| Key | Value | Description |
-| :--- | :--- | :--- |
+| Key             | Value            | Description                                                                   |
+| :-------------- | :--------------- | :---------------------------------------------------------------------------- |
 | `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
 
 #### Responses
@@ -450,7 +451,7 @@ Occurs if no token is provided or the token is invalid/blacklisted.
 
 ```json
 {
-  "message": "Unauthorized"
+    "message": "Unauthorized"
 }
 ```
 
@@ -462,8 +463,8 @@ Occurs if no token is provided or the token is invalid/blacklisted.
 
 #### Headers
 
-| Key | Value | Description |
-| :--- | :--- | :--- |
+| Key             | Value            | Description                                                                   |
+| :-------------- | :--------------- | :---------------------------------------------------------------------------- |
 | `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
 
 #### Responses
@@ -474,7 +475,7 @@ Confirms that the captain has been logged out.
 
 ```json
 {
-  "message": "Logout successfully!"
+    "message": "Logout successfully!"
 }
 ```
 
@@ -484,6 +485,6 @@ Occurs if no token is provided or the token is invalid/blacklisted.
 
 ```json
 {
-  "message": "Unauthorized"
+    "message": "Unauthorized"
 }
 ```

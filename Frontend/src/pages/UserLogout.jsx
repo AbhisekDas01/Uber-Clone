@@ -9,13 +9,14 @@ const UserLogout = () => {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-   
-        
         const logout = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/users/logout`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                const response = await axios.get(
+                    `${import.meta.env.VITE_BASE_URL}/users/logout`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
 
                 if (response.status === 200) {
                     localStorage.removeItem('token');
@@ -23,7 +24,8 @@ const UserLogout = () => {
                     navigate('/login', { replace: true });
                 }
             } catch (error) {
-                const message = error.response?.data?.message || 'Logout failed';
+                const message =
+                    error.response?.data?.message || 'Logout failed';
                 toast.error(message);
                 navigate('/login', { replace: true });
             }
@@ -32,9 +34,7 @@ const UserLogout = () => {
         logout();
     }, [navigate, token]);
 
-    return (
-       <Loading/>
-    )
+    return <Loading />;
 };
 
 export default UserLogout;
