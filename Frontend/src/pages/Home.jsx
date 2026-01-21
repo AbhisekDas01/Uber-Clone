@@ -4,7 +4,8 @@ import { FaUser } from "react-icons/fa";
 import { RiArrowDownWideFill } from "react-icons/ri";
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap';
-import LocationPanel from '../components/LocationPanel';
+import LocationSearchPanel from '../components/LocationSearchPanel';
+
 
 const Home = () => {
 
@@ -12,6 +13,8 @@ const Home = () => {
     const [destination, setDestination] = useState("");
     const [panelOpen, setPanelOpen] = useState(false);
     const panelRef = useRef(null);
+    const vehiclePanelRef = useRef(null);
+    const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -34,6 +37,19 @@ const Home = () => {
             })
         }
     }, [panelOpen]);
+
+    useGSAP(function () {
+
+        if (vehiclePanelOpen) {
+            gsap.to(vehiclePanelRef.current, {
+                transform: 'translateY(0)'
+            })
+        } else {
+            gsap.to(vehiclePanelRef.current, {
+                transform: 'translateY(100%)'
+            })
+        }
+    }, [vehiclePanelOpen]);
 
     return (
         <div className='h-screen relative overflow-hidden'>
@@ -109,14 +125,23 @@ const Home = () => {
                 {/**Location suggestion */}
                 <div ref={panelRef} className='bg-white h-0 opacity-0'>
 
-                    <LocationPanel />
+                    <LocationSearchPanel
+                        setVehiclePanelOpen={setVehiclePanelOpen}
+
+                        setPanelOpen={setPanelOpen}
+                    />
 
                 </div>
             </div>
 
-            <div className='fixed z-10 bottom-0  bg-white px-3 py-6 w-full' >
-                <h3 className='text-2xl font-semibold mb-5'>Choose a Ride</h3>
-                <div className="border-2 active:border-black rounded-xl flex items-center justify-between w-full p-3 mb-2">
+            <div ref={vehiclePanelRef} className='fixed z-10 bottom-0 translate-y-full  bg-white px-3 py-8 w-full' >
+
+                <div className='flex items-center justify-between py-2'>
+
+                    <h3 className='text-2xl font-semibold mb-5'>Choose a Ride</h3>
+                    <h5 onClick={() => { setVehiclePanelOpen(false) }} className='cursor-pointer font-semibold bg-gray-200 rounded-full flex gap-1 items-center  p-2 text-center text-sm text-gray-700'>Leave now<RiArrowDownWideFill width={10} /></h5>
+                </div>
+                <div className="border-2 border-gray-200 active:border-black rounded-xl flex items-center justify-between w-full p-3 mb-2">
                     <img className='h-12' src="/Uber_car.png" alt="" />
                     <div className='ml-2 w-1/2'>
                         <h4 className='flex items-center gap-2 font-medium text-lg'>UberGo <span className='flex items-center gap-1'><FaUser />4</span></h4>
@@ -126,7 +151,7 @@ const Home = () => {
                     <h2 className='text-lg font-semibold'>₹193.20</h2>
                 </div>
 
-                <div className="border-2 active:border-black rounded-xl flex items-center justify-between w-full p-3 mb-2">
+                <div className="border-2 border-gray-200 active:border-black rounded-xl flex items-center justify-between w-full p-3 mb-2">
                     <img className='h-12' src="/Uber_bike.png" alt="" />
                     <div className='-ml-2 w-1/2'>
                         <h4 className='flex items-center gap-2 font-medium text-lg'>Moto <span className='flex items-center gap-1'><FaUser />1</span></h4>
@@ -136,7 +161,7 @@ const Home = () => {
                     <h2 className='text-lg font-semibold'>₹56</h2>
                 </div>
 
-                <div className="border-2 active:border-black rounded-xl flex items-center justify-between w-full p-3 mb-2">
+                <div className="border-2 border-gray-200 active:border-black rounded-xl flex items-center justify-between w-full p-3 mb-2">
                     <img className='h-12' src="/Uber_auto.png" alt="" />
                     <div className='-ml-2 w-1/2'>
                         <h4 className='flex items-center gap-2 font-medium text-lg'>UberAuto <span className='flex items-center gap-1'><FaUser />3</span></h4>
