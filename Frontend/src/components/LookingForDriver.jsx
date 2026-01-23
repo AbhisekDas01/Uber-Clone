@@ -4,13 +4,13 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaMapLocation } from "react-icons/fa6";
 import { HiCurrencyRupee } from "react-icons/hi2";
 
-const LookingForDriver = () => {
+const LookingForDriver = ({setVehicleFound}) => {
     return (
         <>
-            <div className='flex items-center justify-between pt-2'>
+            <div className='flex items-center justify-between py-2'>
 
                 <h3 className='text-2xl font-semibold mb-5'>Looking from Driver</h3>
-
+                <h5 onClick={() => { setVehicleFound(false) }} className='cursor-pointer font-semibold bg-gray-200 rounded-full flex gap-1 items-center  p-2 text-center text-sm text-gray-700'>Leave now<RiArrowDownWideFill width={10} /></h5>
             </div>
 
             <div className='flex gap-2 justify-between flex-col items-center pb-2'>
