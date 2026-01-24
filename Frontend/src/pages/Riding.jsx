@@ -1,5 +1,4 @@
 import React from 'react'
-import { FaLocationDot } from "react-icons/fa6";
 import { FaMapLocation } from "react-icons/fa6";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import { FaHome } from "react-icons/fa";
