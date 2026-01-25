@@ -1,58 +1,159 @@
-import React from 'react'
-import { FaLocationDot } from "react-icons/fa6";
-import { FaMapLocation } from "react-icons/fa6";
-import { HiCurrencyRupee } from "react-icons/hi2";
+import React, { useRef, useState } from 'react'
+import { IoLocationOutline } from "react-icons/io5";
+import { FaRegMap } from "react-icons/fa";
+import { LuIndianRupee } from "react-icons/lu";
+import { Link } from 'react-router-dom';
 
 const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
+
+    const [OTP, setOTP] = useState(new Array(6).fill(""));
+    const otpFieldRef = useRef(new Array(6).fill(null));
+
+    const handleOTPChange = (e, index) => {
+
+        const value = e.target.value;
+
+        if (isNaN(value)) return;
+        const newOTP = [...OTP];
+        newOTP[index] = value.substring(value.length - 1);
+        setOTP(newOTP);
+
+        // move to next index 
+        if (value && index < 5) {
+            otpFieldRef.current[index + 1].focus();
+        }
+    }
+
+    const handleKeyDown = (e, index) => {
+
+        if (e.key == 'Backspace' && index >= 0) {
+            const newOTP = [...OTP];
+            newOTP[index] = "";
+            setOTP(newOTP);
+
+            if (index > 0) {
+                otpFieldRef.current[index - 1].focus();
+            }
+        }
+
+        if (e.key == 'ArrowLeft' && index > 0) {
+            e.preventDefault();
+            otpFieldRef.current[index - 1].focus();
+        }
+
+        if (e.key == 'ArrowRight' && index < 5) {
+            e.preventDefault();
+            otpFieldRef.current[index + 1].focus();
+        }
+
+
+    }
+
+    const handlePaste = (e) => {
+
+        e.preventDefault();
+        const data = e.clipboardData.getData('text').slice(0,6).split("");
+        
+
+        if(data.length == 0) return ;
+
+        const newOTP = [...OTP];
+
+        data.forEach((char , i) => {
+            if(i < 6 && /[0-9]/.test(char)) newOTP[i] = char;
+        });
+        setOTP(newOTP);
+        
+        const nextIndex = Math.min(data.length , 5);
+
+        otpFieldRef.current[nextIndex].focus();
+
+    }
+
+    const submitHandler = (e) => {
+
+        e.preventDefault();
+
+
+    }
+    
     return (
         <div>
             <h3 className='text-2xl font-semibold mb-5'>Confirm this ride to Start</h3>
 
             <div className='flex items-center justify-between mt-4 p-3 bg-yellow-400 rounded-lg'>
                 <div className='flex items-center justify-start gap-3'>
-                    <img className='h-12 w-12 rounded-full object-cover' src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww" alt="" />
+                    <img className='h-12 w-12 rounded-full object-cover border-2 border-white' src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww" alt="" />
                     <h2 className='text-xl font-medium'>Abhisek Das</h2>
                 </div>
-                <h5 className='text-lg font-semibold'>2.5 KM</h5>
+                <h5 className='text-lg font-bold text-gray-900 bg-white/30 px-2 py-1 rounded'>2.5 KM</h5>
             </div>
 
             <div className='flex flex-col justify-between items-center gap-2'>
 
                 <div className='w-full mt-5'>
                     <div className='flex items-center justify-start gap-5 p-3 '>
-                        <FaLocationDot className='text-xl' />
+                        <IoLocationOutline className='text-xl text-yellow-500' />
                         <div >
                             <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm text-grey-600'>Jnv Jagatsinghpur, Odisha</p>
+                            <p className='text-sm text-grey-500'>Jnv Jagatsinghpur, Odisha</p>
                         </div>
                     </div>
 
-                    <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-400'>
-                        <FaMapLocation className='text-xl' />
+                    <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-100'>
+                        <FaRegMap className='text-xl text-yellow-500' />
                         <div >
                             <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm text-grey-600'>Jnv Jagatsinghpur, Odisha</p>
+                            <p className='text-sm text-grey-500'>Jnv Jagatsinghpur, Odisha</p>
                         </div>
                     </div>
 
-                    <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-400'>
-                        <HiCurrencyRupee className='text-xl' />
+                    <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-100'>
+                        <LuIndianRupee className='text-xl text-yellow-500' />
                         <div >
                             <h3 className='text-lg font-medium'>₹195</h3>
-                            <p className='text-sm text-grey-600'>Cash pay</p>
+                            <p className='text-sm text-grey-500'>Cash pay</p>
                         </div>
                     </div>
                 </div>
 
-                <button onClick={() => {
+                <div className='w-full mt-5'>
 
+                    {/* otp field  */}
 
-                }} className='w-full bg-green-600 text-white font-semibold p-2 rounded-lg mt-5'>Confirm</button>
+                    <form onSubmit={(e) => submitHandler(e)}>
 
-                <button onClick={() => {
-                    setRidePopupPanel(false);
-                    setConfirmRidePopupPanel(false)
-                }} className='w-full bg-red-500 text-white font-semibold p-2 rounded-lg mt-1'>Cancel</button>
+                        <h5 className='text-lg font-semibold p-1'>Enter OTP</h5>
+                        <div className='flex justify-between gap-2 mb-6 px-1'>
+                            {
+                                OTP.map((digit, index) => (
+                                    <input
+                                        key={index}
+                                        type="text"
+                                        ref={(el) => (otpFieldRef.current[index] = el)}
+                                        inputMode='numeric'
+                                        value={digit}
+                                        maxLength={1}
+                                        placeholder='-'
+                                        className='w-12 h-12 border-2 border-gray-100 rounded-lg text-center text-xl font-medium focus:border-yellow-400 focus:outline-none bg-[#eee]'
+                                        onChange={(e) => handleOTPChange(e, index)}
+                                        onKeyDown={(e) => handleKeyDown(e, index)}
+                                        onPaste={index == 0 ? handlePaste : undefined}
+
+                                    />
+                                ))
+                            }
+                        </div>
+
+                        <Link to={'/captain-riding'} className='flex items-center justify-center w-full bg-green-600 text-white font-semibold p-2 rounded-lg '>Confirm</Link>
+
+                        <button onClick={() => {
+                            setRidePopupPanel(false);
+                            setConfirmRidePopupPanel(false)
+                        }} className='w-full bg-red-500 text-white font-semibold p-2 rounded-lg mt-1'>Cancel</button>
+                    </form>
+
+                </div>
             </div>
 
         </div>
