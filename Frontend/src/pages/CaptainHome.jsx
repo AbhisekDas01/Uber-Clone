@@ -7,12 +7,16 @@ import { LuLogOut } from "react-icons/lu";
 
 import CaptainsDetails from '../components/CaptainsDetails';
 import RidePopUp from '../components/RidePopUp';
+import ConfirmRidePopUp from '../components/ConfirmRidePopUp';
 
 
 const CaptainHome = () => {
 
     const [ridePopupPanel, setRidePopupPanel] = useState(true);
     const ridePopupPanelRef = useRef(null);
+
+    const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false);
+    const confirmRidePopupPanelRef = useRef(null);
 
     useGSAP(function () {
 
@@ -26,6 +30,21 @@ const CaptainHome = () => {
             })
         }
     }, [ridePopupPanel]);
+
+    useGSAP(function () {
+
+        if (confirmRidePopupPanel) {
+            gsap.to(confirmRidePopupPanelRef.current, {
+                transform: 'translateY(0)'
+            })
+        } else {
+            gsap.to(confirmRidePopupPanelRef.current, {
+                transform: 'translateY(100%)'
+            })
+        }
+    }, [confirmRidePopupPanel]);
+
+
     return (
         <div className='h-screen'>
 
@@ -48,8 +67,20 @@ const CaptainHome = () => {
 
             <div ref={ridePopupPanelRef} className='fixed z-10 bottom-0 translate-y-full    bg-white px-3 py-6  pt-12 w-full' >
 
-                <RidePopUp setRidePopupPanel={setRidePopupPanel} />
+                <RidePopUp
+                    setRidePopupPanel={setRidePopupPanel}
+                    setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+                />
             </div>
+
+            <div ref={confirmRidePopupPanelRef} className='fixed z-10 bottom-0 translate-y-full    bg-white px-3 py-6  pt-12 w-full h-screen' >
+                <ConfirmRidePopUp
+                    setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+                    setRidePopupPanel={setRidePopupPanel}
+                />
+            </div>
+
+
         </div>
     )
 }

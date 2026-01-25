@@ -1,15 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FaLocationDot } from "react-icons/fa6";
 import { FaMapLocation } from "react-icons/fa6";
 import { HiCurrencyRupee } from "react-icons/hi2";
 
-const RidePopUp = ({ setRidePopupPanel ,setConfirmRidePopupPanel }) => {
-
-
-
+const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
     return (
         <div>
-            <h3 className='text-2xl font-semibold mb-5'>New Ride Available!</h3>
+            <h3 className='text-2xl font-semibold mb-5'>Confirm this ride to Start</h3>
 
             <div className='flex items-center justify-between mt-4 p-3 bg-yellow-400 rounded-lg'>
                 <div className='flex items-center justify-start gap-3'>
@@ -48,18 +45,18 @@ const RidePopUp = ({ setRidePopupPanel ,setConfirmRidePopupPanel }) => {
                 </div>
 
                 <button onClick={() => {
-                    setConfirmRidePopupPanel(true);
 
-                }} className='w-full bg-green-600 text-white font-semibold p-2 rounded-lg mt-5'>Accept</button>
+
+                }} className='w-full bg-green-600 text-white font-semibold p-2 rounded-lg mt-5'>Confirm</button>
 
                 <button onClick={() => {
-
-                    setRidePopupPanel(false)
-                }} className='w-full bg-gray-300 text-black font-semibold p-2 rounded-lg mt-1'>Ignore</button>
+                    setRidePopupPanel(false);
+                    setConfirmRidePopupPanel(false)
+                }} className='w-full bg-red-500 text-white font-semibold p-2 rounded-lg mt-1'>Cancel</button>
             </div>
 
         </div>
     )
 }
 
-export default RidePopUp
+export default ConfirmRidePopUp
