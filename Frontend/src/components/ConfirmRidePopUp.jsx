@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
 
-    const [OTP, setOTP] = useState(new Array(6).fill(""));
+    const [OTP, setOTP] =  useState(new Array(6).fill(""));
     const otpFieldRef = useRef(new Array(6).fill(null));
 
     const handleOTPChange = (e, index) => {
@@ -76,7 +76,7 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
 
 
     }
-    
+
     return (
         <div>
             <h3 className='text-2xl font-semibold mb-5'>Confirm this ride to Start</h3>

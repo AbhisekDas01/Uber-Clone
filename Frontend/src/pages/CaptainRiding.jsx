@@ -56,9 +56,9 @@ const CaptainRiding = () => {
 
             </div>
 
-            <div ref={finishRidePanelRef} className='fixed z-10 bottom-0 translate-y-full    bg-white px-3 py-6  pt-12 w-full h-screen' >
+            <div ref={finishRidePanelRef} className='fixed z-10 bottom-0 translate-y-full    bg-white px-3 py-6  pt-12 w-full ' >
                 <FinishRide
-                    
+                    setFinishRidepanel={setFinishRidepanel}
                 />
             </div>
 
