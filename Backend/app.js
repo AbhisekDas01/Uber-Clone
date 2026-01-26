@@ -5,6 +5,8 @@ import cors from 'cors';
 import connectDb from './db/db.js';
 import userRouter from './routes/user.route.js';
 import captainRouter from './routes/captain.route.js';
+import mapRouter from './routes/maps.route.js';
+import rideRouter from './routes/ride.route.js';
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.get('/', (req, res) => {
 //routes
 app.use('/users', userRouter);
 app.use('/captains', captainRouter);
+app.use('/maps' , mapRouter);
+app.use('/rides' , rideRouter);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
