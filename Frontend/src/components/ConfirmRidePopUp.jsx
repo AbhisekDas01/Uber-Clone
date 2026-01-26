@@ -135,7 +135,7 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
                                         value={digit}
                                         maxLength={1}
                                         placeholder='-'
-                                        className='w-12 h-12 border-2 border-gray-100 rounded-lg text-center text-xl font-medium focus:border-yellow-400 focus:outline-none bg-[#eee]'
+                                        className={`w-12 h-12 border-2 border-gray-100 rounded-lg text-center text-xl font-medium  outline-none transition-colors ${digit? "border-yellow-400 bg-yellow-50 text-gray-800": "focus:border-yellow-400 focus:bg-white bg-[#eee] "}`}
                                         onChange={(e) => handleOTPChange(e, index)}
                                         onKeyDown={(e) => handleKeyDown(e, index)}
                                         onPaste={index == 0 ? handlePaste : undefined}
