@@ -4,6 +4,10 @@
 
 - [User Routes](#user-routes)
 - [Captain Routes](#captain-routes)
+- [Maps Routes](#maps-routes)
+- [Ride Routes](#ride-routes)
+- [Maps Routes](#maps-routes)
+- [Ride Routes](#ride-routes)
 
 ## User Routes
 
@@ -488,3 +492,179 @@ Occurs if no token is provided or the token is invalid/blacklisted.
     "message": "Unauthorized"
 }
 ```
+
+## Maps Routes
+
+### Get Coordinates
+
+**Endpoint:** `/maps/get-coordinates` \
+**Method:** `GET` \
+**Description:** Retrieve the latitude and longitude for a given address.
+
+#### Query Parameters
+
+| Field     | Type   | Required | Validations              |
+| :-------- | :----- | :------- | :----------------------- |
+| `address` | String | Yes      | Min length: 3 characters |
+
+#### Headers
+
+| Key             | Value            | Description                                                                   |
+| :-------------- | :--------------- | :---------------------------------------------------------------------------- |
+| `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
+
+#### Responses
+
+**Success (200 OK)**
+
+Returns the coordinates for the specified address.
+
+```json
+{
+    "ltd": 37.7749,
+    "lng": -122.4194
+}
+```
+
+**Error (400 Bad Request) - Validation Failure**
+
+Occurs if the input data fails validation checks.
+
+**Error (404 Not Found) - Coordinates Not Found**
+
+Occurs if the coordinates for the address could not be found.
+
+```json
+{
+    "message": "Coordinates not found"
+}
+```
+
+### Get Distance and Time
+
+**Endpoint:** `/maps/get-distance-time` \
+**Method:** `GET` \
+**Description:** Retrieve the distance and estimated travel time between two locations.
+
+#### Query Parameters
+
+| Field         | Type   | Required | Validations              |
+| :------------ | :----- | :------- | :----------------------- |
+| `origin`      | String | Yes      | Min length: 3 characters |
+| `destination` | String | Yes      | Min length: 3 characters |
+
+#### Headers
+
+| Key             | Value            | Description                                                                   |
+| :-------------- | :--------------- | :---------------------------------------------------------------------------- |
+| `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
+
+#### Responses
+
+**Success (200 OK)**
+
+Returns the distance and duration.
+
+```json
+{
+    "distance": {
+        "text": "10 km",
+        "value": 10000
+    },
+    "duration": {
+        "text": "15 mins",
+        "value": 900
+    }
+}
+```
+
+**Error (400 Bad Request) - Validation Failure**
+
+Occurs if the input data fails validation checks.
+
+**Error (404 Not Found) - No Routes Found**
+
+Occurs if no route could be found between the origin and destination.
+
+```json
+{
+    "message": "No routes found"
+}
+```
+
+### Get Auto-Complete Suggestions
+
+**Endpoint:** `/maps/get-suggestions` \
+**Method:** `GET` \
+**Description:** Retrieve auto-complete suggestions for a partial address.
+
+#### Query Parameters
+
+| Field   | Type   | Required | Validations              |
+| :------ | :----- | :------- | :----------------------- |
+| `input` | String | Yes      | Min length: 3 characters |
+
+#### Headers
+
+| Key             | Value            | Description                                                                   |
+| :-------------- | :--------------- | :---------------------------------------------------------------------------- |
+| `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
+
+#### Responses
+
+**Success (200 OK)**
+
+Returns a list of suggestions.
+
+```json
+["123 Main St, City, Country", "124 Main St, City, Country"]
+```
+
+## Ride Routes
+
+### Create Ride
+
+**Endpoint:** `/rides/create` \
+**Method:** `POST` \
+**Description:** Create a new ride request.
+
+#### Request Body
+
+The request body must be a JSON object containing `pickup`, `destination`, and `vehicleType`.
+
+| Field         | Type   | Required | Validations                      |
+| :------------ | :----- | :------- | :------------------------------- |
+| `pickup`      | String | Yes      | Min length: 3 characters         |
+| `destination` | String | Yes      | Min length: 3 characters         |
+| `vehicleType` | String | Yes      | Must be 'auto', 'car', or 'moto' |
+
+#### Headers
+
+| Key             | Value            | Description                                                                   |
+| :-------------- | :--------------- | :---------------------------------------------------------------------------- |
+| `Authorization` | `Bearer <token>` | JWT token received upon login/registration. Alternatively, passed via cookie. |
+
+#### Responses
+
+**Success (201 Created)**
+
+Returns the created ride details.
+
+```json
+{
+    "ride": {
+        "user": "65af8e9d40...",
+        "pickup": "123 Main St",
+        "destination": "456 Market St",
+        "fare": 150,
+        "status": "pending",
+        "otp": "1234",
+        "_id": "65b0c123...",
+        "__v": 0
+    }
+}
+```
+
+**Error (400 Bad Request) - Validation Failure**
+
+Occurs if the input data fails validation checks.
