@@ -6,8 +6,7 @@
 - [Captain Routes](#captain-routes)
 - [Maps Routes](#maps-routes)
 - [Ride Routes](#ride-routes)
-- [Maps Routes](#maps-routes)
-- [Ride Routes](#ride-routes)
+
 
 ## User Routes
 
