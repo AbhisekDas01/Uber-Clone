@@ -2,7 +2,9 @@ import React from 'react'
 import { RiArrowDownWideFill } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 
-const VehiclePanel = ({ setVehiclePanelOpen, setConfirmRidePanel }) => {
+const VehiclePanel = ({ setVehiclePanelOpen, setConfirmRidePanel , fare }) => {
+
+    const {auto , moto , car} = fare;
     return (
         <>
             <div className='flex items-center justify-between py-2'>
@@ -23,7 +25,7 @@ const VehiclePanel = ({ setVehiclePanelOpen, setConfirmRidePanel }) => {
                     <h5 className='font-medium text-sm'>2 mins away</h5>
                     <p className='font-normal text-xs text-gray-600'>Affordable , compact rides</p>
                 </div>
-                <h2 className='text-lg font-semibold'>₹193.20</h2>
+                <h2 className='text-lg font-semibold'>₹{car || '--'}</h2>
             </div>
 
             <div
@@ -38,7 +40,7 @@ const VehiclePanel = ({ setVehiclePanelOpen, setConfirmRidePanel }) => {
                     <h5 className='font-medium text-sm'>3 mins away</h5>
                     <p className='font-normal text-xs text-gray-600'>Affordable motercycle rides</p>
                 </div>
-                <h2 className='text-lg font-semibold'>₹56</h2>
+                <h2 className='text-lg font-semibold'>₹{moto || '--'}</h2>
             </div>
 
             <div
@@ -53,7 +55,7 @@ const VehiclePanel = ({ setVehiclePanelOpen, setConfirmRidePanel }) => {
                     <h5 className='font-medium text-sm'>3 mins away</h5>
                     <p className='font-normal text-xs text-gray-600'>Affordable motercycle rides</p>
                 </div>
-                <h2 className='text-lg font-semibold'>₹56</h2>
+                <h2 className='text-lg font-semibold'>₹{auto || '--'}</h2>
             </div>
         </>
     )

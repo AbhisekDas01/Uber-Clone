@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaLocationDot } from "react-icons/fa6";
 
-const LocationSearchPanel = ({ suggestions, setVehiclePanelOpen, setPanelOpen, setPickup, setDestination, activeField, isLoading }) => {
+const LocationSearchPanel = ({ suggestions,  setPickup, setDestination, activeField, isLoading }) => {
 
   const handleSuggestionClick = (suggestion) => {
     if (activeField === 'pickup') {

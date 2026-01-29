@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { GoXCircle } from 'react-icons/go';
-import { RiArrowDownWideFill } from 'react-icons/ri';
+import { RiArrowDownWideFill, RiH5 } from 'react-icons/ri';
 import { useGSAP } from '@gsap/react';
 import axios from 'axios';
 import gsap from 'gsap';
@@ -9,6 +9,7 @@ import VehiclePanel from '../components/VehiclePanel';
 import ConfirmRide from '../components/ConfirmRide';
 import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
+import {toast} from 'react-hot-toast'
 
 
 const Home = () => {
@@ -32,6 +33,7 @@ const Home = () => {
     const [destinationSuggestions, setDestinationSuggestions] = useState([]);
     const [activeField, setActiveField] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [fare, setFare] = useState({});
 
     //to hold a 300 ms delay in searches
     const pickupTimer = useRef(null);
@@ -158,6 +160,31 @@ const Home = () => {
         }
     }, [waitingForDriver]);
 
+    async function findTrip() {
+        setVehiclePanelOpen(true);
+        setPanelOpen(false);
+
+        try {
+            
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+                params: {pickup: pickup , destination: destination},
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if(response.status == 200) {
+                setFare(response.data);
+            }
+        } catch (error) {
+            
+            toast.error('Error while loading fare!')
+            setFare({});
+        }
+
+
+    }
+
     return (
         <div className='h-screen relative overflow-hidden'>
             <img
@@ -178,16 +205,14 @@ const Home = () => {
             <div className='flex h-screen flex-col justify-end absolute top-0 w-full '>
 
                 {/**input field */}
-                <div className='h-[30%] p-5 bg-white relative'>
-                    {panelOpen ? (
-                        <RiArrowDownWideFill
-                            className='text-2xl cursor-pointer'
-                            onClick={() => setPanelOpen(false)}
-                        />
-                    ) : (
+                <div className='h-[37%] p-5 bg-white relative'>
+                    <div className='flex items-center justify-between'>
                         <h4 className='text-2xl font-semibold'>Find a trip</h4>
+                        {panelOpen && <h5 onClick={() => setPanelOpen(false)} className='text-sm flex items-center justify-center gap-2 font-semibold bg-gray-200 p-1 px-2 rounded-full'>Close  <RiArrowDownWideFill
+                            className='text-2xl cursor-pointer'
 
-                    )}
+                        /></h5>}
+                    </div>
                     <form onSubmit={submitHandler} className="relative">
                         <div className="line absolute h-16 w-1 bg-gray-900 top-[22%] left-5 rounded-full"></div>
                         <div className="bg-[#eeeeee] my-3 rounded-lg px-4 py-3  w-full flex items-center gap-2 justify-between">
@@ -233,14 +258,14 @@ const Home = () => {
 
                     </form>
 
-                    {panelOpen && <button className='bg-[#111] text-white font-semibold  outline-none rounded px-4 py-2  w-full text-lg placeholder:text-base disabled:cursor-none'>Find Trip</button>}
+                    <button onClick={() => {
+                        findTrip();
+                    }} className='bg-[#111] text-white font-semibold  outline-none rounded-lg px-4 py-2  w-full text-lg disabled:cursor-none'>Find Trip</button>
                 </div>
                 {/**Location suggestion */}
                 <div ref={panelRef} className='bg-white h-0 overflow-y-auto'>
                     <LocationSearchPanel
                         suggestions={activeField === 'pickup' ? pickupSuggestions : destinationSuggestions}
-                        setPanelOpen={setPanelOpen}
-                        setVehiclePanelOpen={setVehiclePanelOpen}
                         setPickup={setPickup}
                         setDestination={setDestination}
                         activeField={activeField}
@@ -252,6 +277,7 @@ const Home = () => {
             {/* vehicle panel  */}
             <div ref={vehiclePanelRef} className='fixed z-10 bottom-0 translate-y-full  bg-white px-3 py-8 pt-12 w-full'>
                 <VehiclePanel
+                    fare = {fare}
                     setVehiclePanelOpen={setVehiclePanelOpen}
                     setConfirmRidePanel={setConfirmRidePanel}
                 />
