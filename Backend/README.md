@@ -7,7 +7,6 @@
 - [Maps Routes](#maps-routes)
 - [Ride Routes](#ride-routes)
 
-
 ## User Routes
 
 ### Register User
@@ -667,3 +666,58 @@ Returns the created ride details.
 **Error (400 Bad Request) - Validation Failure**
 
 Occurs if the input data fails validation checks.
+
+### Get Fare
+
+**Endpoint:** `/rides/get-fare` \
+**Method:** `GET` \
+**Description:** Calculate the estimated fare for available vehicle types between a pickup and destination location.
+
+#### Query Parameters
+
+| Field         | Type   | Required | Validations              |
+| :------------ | :----- | :------- | :----------------------- |
+| `pickup`      | String | Yes      | Min length: 3 characters |
+| `destination` | String | Yes      | Min length: 3 characters |
+
+#### Responses
+
+**Success (200 OK)**
+
+Returns an object containing the calculated fare for each supported vehicle type.
+
+```json
+{
+    "auto": 46,
+    "car": 73,
+    "moto": 37
+}
+```
+
+**Error (400 Bad Request) - Validation Failure**
+
+Occurs if the pickup or destination locations are missing or too short.
+
+```json
+{
+    "errors": [
+        {
+            "type": "field",
+            "value": "no",
+            "msg": "Invalid pickup location",
+            "path": "pickup",
+            "location": "query"
+        }
+    ]
+}
+```
+
+**Error (500 Internal Server Error)**
+
+Occurs if the distance calculation fails or the maps service is unreachable.
+
+```json
+{
+    "message": "Unable to fetch distance and time"
+}
+```

@@ -2,7 +2,7 @@ import rideModel from "../models/ride.model.js";
 import { getDistanceTime } from "./maps.service.js"; 
 import crypto from 'crypto';
 
-async function getFare(pickup, destination) {
+export const getFare = async (pickup, destination) =>  {
 
     if (!pickup || !destination) {
         throw new Error('Pickup and destination are required');
@@ -36,6 +36,7 @@ async function getFare(pickup, destination) {
 
     return fare;
 }
+
 
 function getOtp(num) {
     function generateOtp(num) {
