@@ -31,61 +31,60 @@ const Home = () => {
     const [pickupSuggestions, setPickupSuggestions] = useState([]);
     const [destinationSuggestions, setDestinationSuggestions] = useState([]);
     const [activeField, setActiveField] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handlePickupChange = async (e) => {
+    //to hold a 300 ms delay in searches
+    const pickupTimer = useRef(null);
+    const destinationTimer = useRef(null);
+
+    const fetchSuggestions = async (value, setter) => {
+        setIsLoading(true);
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+                {
+                    params: { input: value },
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                }
+            );
+            const descriptions = Array.isArray(response.data)
+                ? response.data.map((item) => item.description ?? '').filter(Boolean)
+                : [];
+            setter(descriptions);
+        } catch (error) {
+            console.error('Failed to fetch suggestions', error?.response || error);
+            setter([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handlePickupChange = (e) => {
         const value = e.target.value;
         setPickup(value);
 
         // Avoid 400s from backend validation for short inputs
         if (value.trim().length < 3) {
+            if (pickupTimer.current) clearTimeout(pickupTimer.current);
             setPickupSuggestions([]);
             return;
         }
-
-        try {
-            const response = await axios.get(
-                `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
-                {
-                    params: { input: value },
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-                }
-            );
-            const descriptions = Array.isArray(response.data)
-                ? response.data.map((item) => item.description ?? '').filter(Boolean)
-                : [];
-            setPickupSuggestions(descriptions);
-        } catch (error) {
-            console.error('Failed to fetch pickup suggestions', error?.response || error);
-            setPickupSuggestions([]);
-        }
+        if (pickupTimer.current) clearTimeout(pickupTimer.current);
+        pickupTimer.current = setTimeout(() => fetchSuggestions(value, setPickupSuggestions), 300);
     };
 
-    const handleDestinationChange = async (e) => {
+    const handleDestinationChange = (e) => {
         const value = e.target.value;
         setDestination(value);
 
         // Avoid 400s from backend validation for short inputs
         if (value.trim().length < 3) {
+            if (destinationTimer.current) clearTimeout(destinationTimer.current);
             setDestinationSuggestions([]);
             return;
         }
-
-        try {
-            const response = await axios.get(
-                `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
-                {
-                    params: { input: value },
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-                }
-            );
-            const descriptions = Array.isArray(response.data)
-                ? response.data.map((item) => item.description ?? '').filter(Boolean)
-                : [];
-            setDestinationSuggestions(descriptions);
-        } catch (error) {
-            console.error('Failed to fetch destination suggestions', error?.response || error);
-            setDestinationSuggestions([]);
-        }
+        if (destinationTimer.current) clearTimeout(destinationTimer.current);
+        destinationTimer.current = setTimeout(() => fetchSuggestions(value, setDestinationSuggestions), 300);
     };
 
     const submitHandler = async (e) => {
@@ -245,6 +244,7 @@ const Home = () => {
                         setPickup={setPickup}
                         setDestination={setDestination}
                         activeField={activeField}
+                        isLoading={isLoading}
                     />
                 </div>
             </div>

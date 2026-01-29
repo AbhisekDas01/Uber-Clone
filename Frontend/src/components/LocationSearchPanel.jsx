@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaLocationDot } from "react-icons/fa6";
 
-const LocationSearchPanel = ({ suggestions, setVehiclePanelOpen, setPanelOpen, setPickup, setDestination, activeField }) => {
+const LocationSearchPanel = ({ suggestions, setVehiclePanelOpen, setPanelOpen, setPickup, setDestination, activeField, isLoading }) => {
 
   const handleSuggestionClick = (suggestion) => {
     if (activeField === 'pickup') {
@@ -14,6 +14,20 @@ const LocationSearchPanel = ({ suggestions, setVehiclePanelOpen, setPanelOpen, s
   }
 
   const items = Array.isArray(suggestions) ? suggestions : [];
+
+  //to add the loading animation 
+  if (isLoading) {
+    return (
+      <div className='flex flex-col gap-4 mt-4'>
+        {[1, 2, 3].map((_, idx) => (
+          <div key={idx} className='flex items-center gap-4 p-3 animate-pulse'>
+            <div className='h-10 w-10 bg-gray-200 rounded-full shrink-0'></div>
+            <div className='flex-1 h-10 bg-gray-200 rounded-lg'></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <>
