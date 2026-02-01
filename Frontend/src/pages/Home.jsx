@@ -9,7 +9,7 @@ import VehiclePanel from '../components/VehiclePanel';
 import ConfirmRide from '../components/ConfirmRide';
 import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
-import {toast} from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 
 
 const Home = () => {
@@ -34,6 +34,7 @@ const Home = () => {
     const [activeField, setActiveField] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [fare, setFare] = useState({});
+    const [vehicleType, setVehicleType] = useState('');
 
     //to hold a 300 ms delay in searches
     const pickupTimer = useRef(null);
@@ -122,14 +123,15 @@ const Home = () => {
     }, [vehiclePanelOpen]);
 
     useGSAP(function () {
-
         if (confirmRidePanel) {
             gsap.to(confirmRidePanelRef.current, {
-                transform: 'translateY(0)'
+                transform: 'translateY(0)',
+                display: 'block'
             })
         } else {
             gsap.to(confirmRidePanelRef.current, {
-                transform: 'translateY(100%)'
+                transform: 'translateY(100%)',
+                display: 'none'
             })
         }
     }, [confirmRidePanel]);
@@ -165,23 +167,46 @@ const Home = () => {
         setPanelOpen(false);
 
         try {
-            
+
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-                params: {pickup: pickup , destination: destination},
+                params: { pickup: pickup, destination: destination },
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
 
-            if(response.status == 200) {
+            if (response.status == 200) {
                 setFare(response.data);
             }
         } catch (error) {
-            
+
             toast.error('Error while loading fare!')
             setFare({});
         }
 
+
+    }
+
+    async function createRide(vehicleType) {
+
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+                pickup,
+                destination,
+                vehicleType
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            console.log(response);
+
+
+
+        } catch (error) {
+
+        }
 
     }
 
@@ -277,15 +302,22 @@ const Home = () => {
             {/* vehicle panel  */}
             <div ref={vehiclePanelRef} className='fixed z-10 bottom-0 translate-y-full  bg-white px-3 py-8 pt-12 w-full'>
                 <VehiclePanel
-                    fare = {fare}
+                    fare={fare}
+                    setFare={setFare}
+                    setVehicleType={setVehicleType}
                     setVehiclePanelOpen={setVehiclePanelOpen}
                     setConfirmRidePanel={setConfirmRidePanel}
                 />
             </div>
 
             {/* confirmed ride  */}
-            <div ref={confirmRidePanelRef} className='fixed z-10 bottom-0 translate-y-full  bg-white px-3 py-6 pt-12 w-full'>
+            <div ref={confirmRidePanelRef} className='fixed z-10 bottom-0 translate-y-full  bg-white px-3 py-6 pt-12 w-full hidden'>
                 <ConfirmRide
+                    createRide={createRide}
+                    fare={fare[vehicleType]}
+                    pickup={pickup}
+                    destination={destination}
+                    vehicleType={vehicleType}
                     setVehicleFound={setVehicleFound}
                     setConfirmRidePanel={setConfirmRidePanel}
                 />
@@ -293,7 +325,9 @@ const Home = () => {
 
             {/* looking for ride  */}
             <div ref={vehicleFoundRef} className='fixed z-10 bottom-0 translate-y-full  bg-white px-3 py-6 pt-12 w-full'>
-                <LookingForDriver setVehicleFound={setVehicleFound} />
+                <LookingForDriver
+                    setVehicleFound={setVehicleFound}
+                />
             </div>
 
             {/* Waiting for driver  */}

@@ -2,21 +2,21 @@ import React from 'react'
 import { RiArrowDownWideFill } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 
-const VehiclePanel = ({ setVehiclePanelOpen, setConfirmRidePanel , fare }) => {
+const VehiclePanel = ({ setVehiclePanelOpen, setConfirmRidePanel, fare, setFare, setVehicleType }) => {
 
-    const {auto , moto , car} = fare;
+    const { auto, moto, car } = fare;
     return (
         <>
             <div className='flex items-center justify-between py-2'>
 
                 <h3 className='text-2xl font-semibold mb-5'>Choose a Ride</h3>
-                <h5 onClick={() => { setVehiclePanelOpen(false) }} className='cursor-pointer font-semibold bg-gray-200 rounded-full flex gap-1 items-center  p-2 text-center text-sm text-gray-700'>Leave now<RiArrowDownWideFill width={10} /></h5>
+                <h5 onClick={() => { setVehiclePanelOpen(false); setFare({}); }} className='cursor-pointer font-semibold bg-gray-200 rounded-full flex gap-1 items-center  p-2 text-center text-sm text-gray-700'>Leave now<RiArrowDownWideFill width={10} /></h5>
             </div>
 
             <div
                 onClick={() => {
                     setConfirmRidePanel(true);
-                    setVehiclePanelOpen(false);
+                    setVehicleType('car');
                 }}
                 className="border-2 border-gray-200 active:border-black rounded-xl flex items-center justify-between w-full p-3 mb-2">
                 <img className='h-12' src="/Uber_car.png" alt="" />
@@ -31,7 +31,7 @@ const VehiclePanel = ({ setVehiclePanelOpen, setConfirmRidePanel , fare }) => {
             <div
                 onClick={() => {
                     setConfirmRidePanel(true);
-                    setVehiclePanelOpen(false);
+                    setVehicleType('moto');
                 }}
                 className="border-2 border-gray-200 active:border-black rounded-xl flex items-center justify-between w-full p-3 mb-2">
                 <img className='h-12' src="/Uber_bike.png" alt="" />
@@ -46,7 +46,7 @@ const VehiclePanel = ({ setVehiclePanelOpen, setConfirmRidePanel , fare }) => {
             <div
                 onClick={() => {
                     setConfirmRidePanel(true);
-                    setVehiclePanelOpen(false);
+                    setVehicleType('auto');
                 }}
                 className="border-2 border-gray-200 active:border-black rounded-xl flex items-center justify-between w-full p-3 mb-2">
                 <img className='h-12' src="/Uber_auto.png" alt="" />
