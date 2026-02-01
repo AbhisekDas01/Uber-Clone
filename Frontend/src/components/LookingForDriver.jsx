@@ -4,7 +4,13 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaMapLocation } from "react-icons/fa6";
 import { HiCurrencyRupee } from "react-icons/hi2";
 
-const LookingForDriver = ({setVehicleFound}) => {
+const LookingForDriver = ({ setVehicleFound, fare, pickup, destination, vehicleType }) => {
+
+    const vehicleLogos = {
+        car: '/Uber_car.png',
+        moto: '/Uber_bike.png',
+        auto: '/Uber_auto.png'
+    }
     return (
         <>
             <div className='flex items-center justify-between py-2'>
@@ -20,29 +26,29 @@ const LookingForDriver = ({setVehicleFound}) => {
             </div>
 
             <div className='flex flex-col justify-between items-center gap-2'>
-                <img className='h-20' src="/Uber_car.png" alt="" />
+                <img className='h-20' src={vehicleLogos[vehicleType]} alt="" />
 
                 <div className='w-full mt-5'>
                     <div className='flex items-center justify-start gap-5 p-3 '>
                         <FaLocationDot className='text-xl' />
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm text-grey-600'>Jnv Jagatsinghpur, Odisha</p>
+                            <h3 className='text-lg font-medium'>{pickup.split(',')[0]}</h3>
+                            <p className='text-sm text-grey-600'>{pickup.split(',').splice(1).join(", ")}</p>
                         </div>
                     </div>
 
                     <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-400'>
                         <FaMapLocation className='text-xl' />
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm text-grey-600'>Jnv Jagatsinghpur, Odisha</p>
+                            <h3 className='text-lg font-medium'>{destination.split(',')[0]}</h3>
+                            <p className='text-sm text-grey-600'>{destination.split(',').splice(1).join(', ')}</p>
                         </div>
                     </div>
 
                     <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-400'>
                         <HiCurrencyRupee className='text-xl' />
                         <div >
-                            <h3 className='text-lg font-medium'>₹195</h3>
+                            <h3 className='text-lg font-medium'>₹{fare}</h3>
                             <p className='text-sm text-grey-600'>Cash pay</p>
                         </div>
                     </div>
