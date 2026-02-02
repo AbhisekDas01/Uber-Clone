@@ -10,6 +10,10 @@ import ConfirmRide from '../components/ConfirmRide';
 import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
 import { toast } from 'react-hot-toast'
+import { SocketDataContext } from '../context/SocketContext';
+import { UserDataContext } from '../context/UserContext';
+import { useContext } from 'react';
+import { useEffect } from 'react';
 
 
 const Home = () => {
@@ -35,6 +39,17 @@ const Home = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [fare, setFare] = useState({});
     const [vehicleType, setVehicleType] = useState('');
+
+    const {sendMessage , receiveMessage} = useContext(SocketDataContext);
+    const {user} = useContext(UserDataContext);
+
+    useEffect(() => {
+
+        if(!user) return;
+
+        sendMessage('join' , {userType: 'user' , userId: user._id});
+        
+    } , []);
 
     //to hold a 300 ms delay in searches
     const pickupTimer = useRef(null);
