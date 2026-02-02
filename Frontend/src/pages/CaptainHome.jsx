@@ -26,11 +26,30 @@ const CaptainHome = () => {
     const { captain } = useContext(CaptainDataContext);
 
     useEffect(() => {
-        
 
-        if(!captain) return;
-        
-        sendMessage('join' , {userType: 'captain' , userId: captain._id});
+
+        if (!captain) return;
+
+        sendMessage('join', { userType: 'captain', userId: captain._id });
+
+        const updateLocation = () => {
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => sendMessage('update-location-captain', {
+                    userId: captain._id,
+                    location: {
+                        ltd: position.coords.latitude,
+                        lng: position.coords.longitude
+                    }
+                }))
+            }
+        }
+
+        const locationInterval = setInterval(updateLocation, 10000);
+
+        updateLocation();
+
+
 
     }, [])
 
