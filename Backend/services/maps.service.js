@@ -13,7 +13,7 @@ export const getAddressCoordinate = async (address) => {
         if (response.data.status === 'OK') {
             const location = response.data.results[0].geometry.location;
             return {
-                lat: location.lat,
+                ltd: location.lat,
                 lng: location.lng
             };
         } else {
@@ -75,14 +75,18 @@ export const getAutoCompleteSuggestions = async (input) => {
     }
 }
 
-export const getCaptainsInTheRadius = async (ltd , lng , radius) => {
-    
+export const getCaptainsInTheRadius = async ({ltd , lng , radius}) => {
+
     const captains = await captianModel.find({
         location: {
             $geoWithin: {
-                $centerSphere: [[ltd , lng] , radius/ 6371]
+                $centerSphere: [[lng , ltd] , radius/ 6371]
             }
         }
     })
+
+    return captains;
 }
+
+
 

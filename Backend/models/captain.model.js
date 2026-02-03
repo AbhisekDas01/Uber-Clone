@@ -58,14 +58,19 @@ const captainSchema = new mongoose.Schema({
         },
     },
     location: {
-        ltd: {
-            type: Number,
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
         },
-        lng: {
-            type: Number,
-        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
     },
 });
+
+captainSchema.index({ location: '2dsphere' });
 
 captainSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, ENV_JWT_SECRET, {

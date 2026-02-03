@@ -16,8 +16,9 @@ import { useEffect } from 'react';
 
 const CaptainHome = () => {
 
-    const [ridePopupPanel, setRidePopupPanel] = useState(true);
+    const [ridePopupPanel, setRidePopupPanel] = useState(false);
     const ridePopupPanelRef = useRef(null);
+    const [ride , setRide] = useState({});
 
     const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false);
     const confirmRidePopupPanelRef = useRef(null);
@@ -51,7 +52,13 @@ const CaptainHome = () => {
 
 
 
-    }, [])
+    }, []);
+
+    receiveMessage('new-ride', (data) => {
+        setRide(data);
+        setRidePopupPanel(true);
+        
+    } )
 
     useGSAP(function () {
 
@@ -103,6 +110,7 @@ const CaptainHome = () => {
             <div ref={ridePopupPanelRef} className='fixed z-10 bottom-0 translate-y-full    bg-white px-3 py-6  pt-12 w-full' >
 
                 <RidePopUp
+                    ride={ride}
                     setRidePopupPanel={setRidePopupPanel}
                     setConfirmRidePopupPanel={setConfirmRidePopupPanel}
                 />

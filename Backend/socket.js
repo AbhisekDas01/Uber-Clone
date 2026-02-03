@@ -42,8 +42,8 @@ export function initializeSocket(server) {
 
             await captainModel.findByIdAndUpdate(userId, {
                 location: {
-                    ltd: location.ltd,
-                    lng: location.lng
+                    type: 'Point',
+                    coordinates: [location.lng, location.ltd]
                 }
             });
 
@@ -63,7 +63,6 @@ export function initializeSocket(server) {
 
 export const sendMessageToSocketId = (socketId, messageObject) => {
 
-    console.log(messageObject);
 
     if (io) {
         io.to(socketId).emit(messageObject.event, messageObject.data);
