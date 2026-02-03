@@ -1,6 +1,8 @@
 
 import axios from 'axios';
 import { GOOGLE_MAPS_API } from '../configs/env.config.js';
+import captianModel from '../models/captain.model.js';
+
 
 export const getAddressCoordinate = async (address) => {
     const apiKey = GOOGLE_MAPS_API;
@@ -71,5 +73,16 @@ export const getAutoCompleteSuggestions = async (input) => {
         console.error(err);
         throw err;
     }
+}
+
+export const getCaptainsInTheRadius = async (ltd , lng , radius) => {
+    
+    const captains = await captianModel.find({
+        location: {
+            $geoWithin: {
+                $centerSphere: [[ltd , lng] , radius/ 6371]
+            }
+        }
+    })
 }
 

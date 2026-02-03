@@ -21,7 +21,7 @@ export function initializeSocket(server) {
             const { userId, userType } = data;
 
             console.log(`Join evennt`);
-            
+
 
             if (userType === 'user') {
                 await userModel.findByIdAndUpdate(userId, { socketId: socket.id });
@@ -33,7 +33,10 @@ export function initializeSocket(server) {
         socket.on('update-location-captain', async (data) => {
             const { userId, location } = data;
 
+
+
             if (!location || !location.ltd || !location.lng) {
+                console.log('Invalid location data:', location);
                 return socket.emit('error', { message: 'Invalid location data' });
             }
 
@@ -43,6 +46,9 @@ export function initializeSocket(server) {
                     lng: location.lng
                 }
             });
+
+
+
         });
 
         socket.on('disconnect', () => {
