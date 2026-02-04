@@ -14,9 +14,12 @@ import { SocketDataContext } from '../context/SocketContext';
 import { UserDataContext } from '../context/UserContext';
 import { useContext } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
+
+    const navigate = useNavigate();
 
     const [pickup, setPickup] = useState("");
     const [destination, setDestination] = useState("");
@@ -68,6 +71,16 @@ const Home = () => {
             socket.off('ride-confirmed', handleRideConfirmed);
         };
     }, [socket]);
+
+    useEffect(() => {
+
+        if(!socket) return;
+
+        socket.on('ride-started' , ride => {
+            setWaitingForDriver(false);
+            navigate('/riding')
+        })
+    } , [socket]);
 
     //to hold a 300 ms delay in searches
     const pickupTimer = useRef(null);

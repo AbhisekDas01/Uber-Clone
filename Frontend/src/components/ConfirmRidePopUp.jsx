@@ -2,9 +2,13 @@ import React, { useRef, useState } from 'react'
 import { IoLocationOutline } from "react-icons/io5";
 import { FaRegMap } from "react-icons/fa";
 import { LuIndianRupee } from "react-icons/lu";
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel, ride }) => {
+
+    const navigate = useNavigate();
 
     const [OTP, setOTP] = useState(new Array(6).fill(""));
     const otpFieldRef = useRef(new Array(6).fill(null));
@@ -70,10 +74,40 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel, ride })
 
     }
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
 
         e.preventDefault();
+
+        const otpText = OTP.join("");
         
+
+        try {
+
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`, {
+                params: {
+                    rideId: ride?._id,
+                    otp: otpText
+                },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if(response.status === 200) {
+                toast.success('Ride started');
+                setConfirmRidePopupPanel(false);
+                navigate('/captain-riding');
+            }
+
+        } catch (error) {
+            const message =
+                error?.response?.data?.message ||
+                error?.response?.data?.error ||
+                'Failed to start ride';
+            toast.error(message);
+        } finally {
+            setOTP(new Array(6).fill(""));
+        }
 
     }
 
@@ -84,7 +118,7 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel, ride })
             <div className='flex items-center justify-between mt-4 p-3 bg-yellow-400 rounded-lg'>
                 <div className='flex items-center justify-start gap-3'>
                     <img className='h-12 w-12 rounded-full object-cover border-2 border-white' src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww" alt="" />
-                    <h2 className='text-xl font-medium capitalize'>{ride?.user.fullname.firstname + " " + ride?.user.fullname.lastname}</h2>
+                    <h2 className='text-xl font-medium capitalize'>{ride?.user?.fullname.firstname + " " + ride?.user?.fullname.lastname}</h2>
                 </div>
                 <h5 className='text-lg font-bold text-gray-900 bg-white/30 px-2 py-1 rounded'>2.5 KM</h5>
             </div>
@@ -95,16 +129,16 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel, ride })
                     <div className='flex items-center justify-start gap-5 p-3 '>
                         <IoLocationOutline className='text-xl text-yellow-500' />
                         <div >
-                            <h3 className='text-lg font-medium'>{ride?.pickup.split(",")[0]}</h3>
-                            <p className='text-sm text-grey-600'>{ride?.pickup.split(",").splice(1).join(", ")}</p>
+                            <h3 className='text-lg font-medium'>{ride?.pickup?.split(",")[0]}</h3>
+                            <p className='text-sm text-grey-600'>{ride?.pickup?.split(",").splice(1).join(", ")}</p>
                         </div>
                     </div>
 
                     <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-100'>
                         <FaRegMap className='text-xl text-yellow-500' />
                         <div >
-                            <h3 className='text-lg font-medium'>{ride?.destination.split(",")[0]}</h3>
-                            <p className='text-sm text-grey-600'>{ride?.destination.split(",").splice(1).join(", ")}</p>
+                            <h3 className='text-lg font-medium'>{ride?.destination?.split(",")[0]}</h3>
+                            <p className='text-sm text-grey-600'>{ride?.destination?.split(",").splice(1).join(", ")}</p>
                         </div>
                     </div>
 
