@@ -5,7 +5,7 @@ import { FaRegMap } from "react-icons/fa";
 import { LuIndianRupee } from "react-icons/lu";
 
 
-const RidePopUp = ({ setRidePopupPanel, setConfirmRidePopupPanel, ride }) => {
+const RidePopUp = ({ setRidePopupPanel, setConfirmRidePopupPanel, ride , confirmRide }) => {
 
 
 
@@ -57,7 +57,7 @@ const RidePopUp = ({ setRidePopupPanel, setConfirmRidePopupPanel, ride }) => {
                     <button onClick={() => {
                         
                         setConfirmRidePopupPanel(true);
-
+                        confirmRide();
                     }} className=' bg-green-600 text-white font-semibold p-3 px-11 rounded-lg'>Accept</button>
 
 

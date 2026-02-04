@@ -4,9 +4,9 @@ import { FaRegMap } from "react-icons/fa";
 import { LuIndianRupee } from "react-icons/lu";
 import { Link } from 'react-router-dom';
 
-const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
+const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel, ride }) => {
 
-    const [OTP, setOTP] =  useState(new Array(6).fill(""));
+    const [OTP, setOTP] = useState(new Array(6).fill(""));
     const otpFieldRef = useRef(new Array(6).fill(null));
 
     const handleOTPChange = (e, index) => {
@@ -52,19 +52,19 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
     const handlePaste = (e) => {
 
         e.preventDefault();
-        const data = e.clipboardData.getData('text').slice(0,6).split("");
-        
+        const data = e.clipboardData.getData('text').slice(0, 6).split("");
 
-        if(data.length == 0) return ;
+
+        if (data.length == 0) return;
 
         const newOTP = [...OTP];
 
-        data.forEach((char , i) => {
-            if(i < 6 && /[0-9]/.test(char)) newOTP[i] = char;
+        data.forEach((char, i) => {
+            if (i < 6 && /[0-9]/.test(char)) newOTP[i] = char;
         });
         setOTP(newOTP);
-        
-        const nextIndex = Math.min(data.length , 5);
+
+        const nextIndex = Math.min(data.length, 5);
 
         otpFieldRef.current[nextIndex].focus();
 
@@ -73,7 +73,7 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
     const submitHandler = (e) => {
 
         e.preventDefault();
-
+        
 
     }
 
@@ -84,7 +84,7 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
             <div className='flex items-center justify-between mt-4 p-3 bg-yellow-400 rounded-lg'>
                 <div className='flex items-center justify-start gap-3'>
                     <img className='h-12 w-12 rounded-full object-cover border-2 border-white' src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww" alt="" />
-                    <h2 className='text-xl font-medium'>Abhisek Das</h2>
+                    <h2 className='text-xl font-medium capitalize'>{ride?.user.fullname.firstname + " " + ride?.user.fullname.lastname}</h2>
                 </div>
                 <h5 className='text-lg font-bold text-gray-900 bg-white/30 px-2 py-1 rounded'>2.5 KM</h5>
             </div>
@@ -95,23 +95,23 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
                     <div className='flex items-center justify-start gap-5 p-3 '>
                         <IoLocationOutline className='text-xl text-yellow-500' />
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm text-grey-500'>Jnv Jagatsinghpur, Odisha</p>
+                            <h3 className='text-lg font-medium'>{ride?.pickup.split(",")[0]}</h3>
+                            <p className='text-sm text-grey-600'>{ride?.pickup.split(",").splice(1).join(", ")}</p>
                         </div>
                     </div>
 
                     <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-100'>
                         <FaRegMap className='text-xl text-yellow-500' />
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm text-grey-500'>Jnv Jagatsinghpur, Odisha</p>
+                            <h3 className='text-lg font-medium'>{ride?.destination.split(",")[0]}</h3>
+                            <p className='text-sm text-grey-600'>{ride?.destination.split(",").splice(1).join(", ")}</p>
                         </div>
                     </div>
 
                     <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-100'>
                         <LuIndianRupee className='text-xl text-yellow-500' />
                         <div >
-                            <h3 className='text-lg font-medium'>₹195</h3>
+                            <h3 className='text-lg font-medium'>₹{ride?.fare}</h3>
                             <p className='text-sm text-grey-500'>Cash pay</p>
                         </div>
                     </div>
@@ -135,7 +135,7 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
                                         value={digit}
                                         maxLength={1}
                                         placeholder='-'
-                                        className={`w-12 h-12 border-2 border-gray-100 rounded-lg text-center text-xl font-medium  outline-none transition-colors ${digit? "border-yellow-400 bg-yellow-50 text-gray-800": "focus:border-yellow-400 focus:bg-white bg-[#eee] "}`}
+                                        className={`w-12 h-12 border-2 border-gray-100 rounded-lg text-center text-xl font-medium  outline-none transition-colors ${digit ? "border-yellow-400 bg-yellow-50 text-gray-800" : "focus:border-yellow-400 focus:bg-white bg-[#eee] "}`}
                                         onChange={(e) => handleOTPChange(e, index)}
                                         onKeyDown={(e) => handleKeyDown(e, index)}
                                         onPaste={index == 0 ? handlePaste : undefined}
@@ -145,7 +145,7 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel }) => {
                             }
                         </div>
 
-                        <Link to={'/captain-riding'} className='flex items-center justify-center w-full bg-green-600 text-white font-semibold p-2 rounded-lg '>Confirm</Link>
+                        <button className='flex items-center justify-center w-full bg-green-600 text-white font-semibold p-2 rounded-lg '>Confirm</button>
 
                         <button onClick={() => {
                             setRidePopupPanel(false);
