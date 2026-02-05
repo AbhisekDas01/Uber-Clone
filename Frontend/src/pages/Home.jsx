@@ -269,20 +269,20 @@ const Home = () => {
     return (
         <div className='h-screen relative overflow-hidden'>
             <img
-                className="w-16 absolute left-5 top-5"
+                className="w-16 absolute left-5 top-5 z-10"
                 src="./Uber_logo.png"
                 alt="Uber logo"
             />
 
-            <div className='h-screen w-screen'>
+            <div className='h-screen w-screen absolute inset-0 z-0'>
                 {/**Image for temp use */}
                 <LiveTracking />
             </div>
 
-            <div className='flex h-screen flex-col justify-end absolute top-0 w-full '>
+            <div className='flex h-screen flex-col justify-end absolute top-0 w-full z-10 pointer-events-none'>
 
                 {/**input field */}
-                <div className='h-[37%] p-5 bg-white relative'>
+                <div className='h-[37%] p-5 bg-white relative pointer-events-auto'>
                     <div className='flex items-center justify-between'>
                         <h4 className='text-2xl font-semibold'>Find a trip</h4>
                         {panelOpen && <h5 onClick={() => setPanelOpen(false)} className='text-sm flex items-center justify-center gap-2 font-semibold bg-gray-200 p-1 px-2 rounded-full'>Close  <RiArrowDownWideFill
@@ -340,7 +340,7 @@ const Home = () => {
                     }} className='bg-[#111] text-white font-semibold  outline-none rounded-lg px-4 py-2  w-full text-lg disabled:cursor-none'>Find Trip</button>
                 </div>
                 {/**Location suggestion */}
-                <div ref={panelRef} className='bg-white h-0 overflow-y-auto'>
+                <div ref={panelRef} className='bg-white h-0 overflow-y-auto pointer-events-auto'>
                     <LocationSearchPanel
                         suggestions={activeField === 'pickup' ? pickupSuggestions : destinationSuggestions}
                         setPickup={setPickup}
