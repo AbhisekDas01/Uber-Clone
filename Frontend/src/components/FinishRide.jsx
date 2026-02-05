@@ -2,9 +2,33 @@ import React from 'react'
 import { IoLocationOutline } from "react-icons/io5";
 import { FaRegMap } from "react-icons/fa";
 import { LuIndianRupee } from "react-icons/lu";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const FinishRide = ({ setFinishRidepanel }) => {
+const FinishRide = ({ setFinishRidepanel, ride }) => {
+
+    const navigate = useNavigate();
+
+    async function endRide() {
+
+        try {
+
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/end-ride`, {
+                rideId: ride._id,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+
+            if (response.status === 200) {
+                navigate('/captain-home')
+            }
+
+        } catch (error) {
+            console.error('Error in ending ride: ', error);
+        }
+    }
     return (
         <div>
             <h3 className='text-2xl font-semibold mb-5'>Finish this Ride</h3>
@@ -12,7 +36,7 @@ const FinishRide = ({ setFinishRidepanel }) => {
             <div className='flex items-center justify-between mt-4 p-3 bg-yellow-400 rounded-lg'>
                 <div className='flex items-center justify-start gap-3'>
                     <img className='h-12 w-12 rounded-full object-cover border-2 border-white' src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww" alt="" />
-                    <h2 className='text-xl font-medium'>Abhisek Das</h2>
+                    <h2 className='text-xl font-medium capitalize'>{ride?.user?.fullname.firstname + " " + ride?.user?.fullname.lastname}</h2>
                 </div>
                 <h5 className='text-lg font-bold text-gray-900 bg-white/30 px-2 py-1 rounded'>2.5 KM</h5>
             </div>
@@ -23,23 +47,23 @@ const FinishRide = ({ setFinishRidepanel }) => {
                     <div className='flex items-center justify-start gap-5 p-3 '>
                         <IoLocationOutline className='text-xl text-yellow-500' />
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm text-grey-500'>Jnv Jagatsinghpur, Odisha</p>
+                            <h3 className='text-lg font-medium'>{ride?.pickup?.split(",")[0]}</h3>
+                            <p className='text-sm text-grey-500'>{ride?.pickup?.split(",").splice(1).join(", ")}</p>
                         </div>
                     </div>
 
                     <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-100'>
                         <FaRegMap className='text-xl text-yellow-500' />
                         <div >
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm text-grey-500'>Jnv Jagatsinghpur, Odisha</p>
+                            <h3 className='text-lg font-medium'>{ride?.destination?.split(",")[0]}</h3>
+                            <p className='text-sm text-grey-500'>{ride?.destination?.split(",").splice(1).join(", ")}</p>
                         </div>
                     </div>
 
                     <div className='flex items-center justify-start gap-5 p-3 border-t border-gray-100'>
                         <LuIndianRupee className='text-xl text-yellow-500' />
                         <div >
-                            <h3 className='text-lg font-medium'>₹195</h3>
+                            <h3 className='text-lg font-medium'>₹{ride?.fare}</h3>
                             <p className='text-sm text-grey-500'>Cash pay</p>
                         </div>
                     </div>
@@ -49,7 +73,7 @@ const FinishRide = ({ setFinishRidepanel }) => {
 
                     {/* otp field  */}
 
-                    <Link to={'/captain-home'} className='flex items-center justify-center text-lg w-full bg-green-600 text-white font-semibold p-2 rounded-lg '>Finish Ride</Link>
+                    <button onClick={endRide} className='flex items-center justify-center text-lg w-full bg-green-600 text-white font-semibold p-2 rounded-lg '>Finish Ride</button>
 
 
 

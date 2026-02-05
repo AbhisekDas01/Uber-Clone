@@ -79,7 +79,7 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel, ride })
         e.preventDefault();
 
         const otpText = OTP.join("");
-        
+
 
         try {
 
@@ -93,10 +93,10 @@ const ConfirmRidePopUp = ({ setConfirmRidePopupPanel, setRidePopupPanel, ride })
                 }
             });
 
-            if(response.status === 200) {
+            if (response.status === 200) {
                 toast.success('Ride started');
                 setConfirmRidePopupPanel(false);
-                navigate('/captain-riding');
+                navigate('/captain-riding', { state: { ride: ride } })
             }
 
         } catch (error) {

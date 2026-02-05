@@ -1,16 +1,19 @@
 import React, { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { LuLogOut } from "react-icons/lu";
 import { IoIosArrowUp } from "react-icons/io";
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap';
 import FinishRide from '../components/FinishRide';
+import LiveTracking from '../components/LiveTracking';
 
 
 const CaptainRiding = () => {
 
     const [finishRidePanel, setFinishRidepanel] = useState(false);
     const finishRidePanelRef = useRef(null);
+    const location = useLocation();
+    const rideData = location.state?.ride;
 
 
     useGSAP(function () {
@@ -37,12 +40,12 @@ const CaptainRiding = () => {
 
             </div>
             <div className='h-4/5'>
-                <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*gwMx05pqII5hbfmX.gif" alt="" />
+                <LiveTracking />
             </div>
 
-            <div 
-            className='h-1/5 p-6 bg-yellow-400 flex items-center justify-between relative pt-10'
-            onClick={() => setFinishRidepanel(true)}
+            <div
+                className='h-1/5 p-6 bg-yellow-400 flex items-center justify-between relative pt-10'
+                onClick={() => setFinishRidepanel(true)}
             >
 
                 <h5 className='absolute top-0 left-0 w-full flex items-center justify-center p-1'><IoIosArrowUp className='text-2xl font-semibold' /></h5>
@@ -58,6 +61,7 @@ const CaptainRiding = () => {
 
             <div ref={finishRidePanelRef} className='fixed z-10 bottom-0 translate-y-full    bg-white px-3 py-6  pt-12 w-full ' >
                 <FinishRide
+                    ride={rideData}
                     setFinishRidepanel={setFinishRidepanel}
                 />
             </div>

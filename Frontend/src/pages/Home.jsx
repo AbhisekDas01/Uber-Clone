@@ -15,6 +15,7 @@ import { UserDataContext } from '../context/UserContext';
 import { useContext } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LiveTracking from '../components/LiveTracking';
 
 
 const Home = () => {
@@ -74,13 +75,22 @@ const Home = () => {
 
     useEffect(() => {
 
-        if(!socket) return;
+        if (!socket) return;
 
-        socket.on('ride-started' , ride => {
+        console.log("ride stated");
+
+
+        const handleRideStarted = (ride) => {
             setWaitingForDriver(false);
-            navigate('/riding')
-        })
-    } , [socket]);
+            navigate('/riding', { state: { ride } })
+        }
+
+        socket.on('ride-started', handleRideStarted)
+
+        return () => {
+            socket.off('ride-started', handleRideStarted)
+        }
+    }, [socket, navigate]);
 
     //to hold a 300 ms delay in searches
     const pickupTimer = useRef(null);
@@ -266,11 +276,7 @@ const Home = () => {
 
             <div className='h-screen w-screen'>
                 {/**Image for temp use */}
-                <img
-                    className='h-full w-full object-cover'
-                    src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*gwMx05pqII5hbfmX.gif"
-                    alt="Map img"
-                />
+                <LiveTracking />
             </div>
 
             <div className='flex h-screen flex-col justify-end absolute top-0 w-full '>

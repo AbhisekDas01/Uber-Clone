@@ -15,6 +15,7 @@ import { useContext } from 'react';
 import { useEffect } from 'react';
 
 import axios from 'axios'
+import LiveTracking from '../components/LiveTracking';
 
 const CaptainHome = () => {
 
@@ -116,7 +117,7 @@ const CaptainHome = () => {
 
             </div>
             <div className='h-3/5'>
-                <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*gwMx05pqII5hbfmX.gif" alt="" />
+                <LiveTracking />
             </div>
 
             <div className='h-2/5 p-6'>
